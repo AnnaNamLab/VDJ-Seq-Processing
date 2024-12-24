@@ -7,6 +7,7 @@ VDJ (Variable, Diversity, and Joining) processing is a key mechanism in the gene
 
 1) TRUST4 (https://github.com/liulab-dfci/TRUST4)
 2) igblast (https://ncbi.github.io/igblast/cook/How-to-set-up.html)
+3) PhyloPart_v2.1
 
 ## Method)
 
