@@ -1,0 +1,8 @@
+To run phylppart
+
+
+
+Cd /Users/saramoein/Documents/new_run_HL_August2024/HL21/no_germline_phylo_HLsample_CDR3_IGK_modelF81/
+
+
+java -jar /Users/saramoein/Documents/new_run_HL_August2024/PhyloPart_v2.1/PhyloPart_v2.1.jar phylo_full_tree_aug2024 -OOut0.1_sara.txt 
