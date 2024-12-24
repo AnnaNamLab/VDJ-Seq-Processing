@@ -1,3 +1,8 @@
+# Requirements
+
+1) TRUST4 (https://github.com/liulab-dfci/TRUST4)
+2) igblast (https://ncbi.github.io/igblast/cook/How-to-set-up.html)
+
 # VDJ processing
 
 VDJ (Variable, Diversity, and Joining) processing is a key mechanism in the generation of diverse B cell receptors (BCRs), which are essential for the adaptive immune response. The BCR is an antibody anchored on the surface of B cells, recognizing specific antigens through highly variable regions, generated during B cell development. The generation of a diverse B cell receptor (BCR) repertoire is fundamental to the immune system's ability to recognize and respond to a vast array of pathogens. This repository contains all codes related to generating BCR/TCR sequencing, and all downstream analysis.
@@ -11,7 +16,7 @@ Building the phylogenetic tree from BCR data has 5 main steps: generating BCR re
 
 ### 1)  Generating BCR Repertoire Using TRUST4
 
-To reconstruct the BCR repertoire, we have applied TRUST4. TRUST4 is an open-source algorithm for reconstruction of immune receptor repertoire in αβ/γδ B cells and T cells from bulk and single-cell RNA-seq data [1]. TRUST4 can assemble full sequences based on VDJ assignments. This algorithm extracts the good TCR/BCR candidate reads from BAM or FATSQ files with fast speed and has a de-novo approach for assembling the candidate reads. It implements a greedy strategy by aligning the candidate reads to an existing contig. For contigs annotation, TRUST4 uses ImmunoGeneTics (IMGT) database [2]. TRUST4 has multiple output files including the extracted contigs and corresponding nucleotide weight, a fasta file for annotation of the consensus assembly, and files with the focus on the CDR3 and constructed full sequences. Also, TRUST4 provides an extra step for clustering the contigs based on similarity of VDJs and CDR3, and during this step they remove any partial or incomplete CDR3. This clustering file is the output we used for downstream. More information and the github for TRUST4 is available in: https://github.com/liulab-dfci/TRUST4
+To reconstruct the BCR repertoire, we have applied TRUST4. TRUST4 is an open-source algorithm for reconstruction of immune receptor repertoire in αβ/γδ B cells and T cells from bulk and single-cell RNA-seq data [1]. TRUST4 can assemble full sequences based on VDJ assignments. This algorithm extracts the good TCR/BCR candidate reads from BAM or FATSQ files with fast speed and has a de-novo approach for assembling the candidate reads. It implements a greedy strategy by aligning the candidate reads to an existing contig. For contigs annotation, TRUST4 uses ImmunoGeneTics (IMGT) database [2]. TRUST4 has multiple output files including the extracted contigs and corresponding nucleotide weight, a fasta file for annotation of the consensus assembly, and files with the focus on the CDR3 and constructed full sequences. Also, TRUST4 provides an extra step for clustering the contigs based on similarity of VDJs and CDR3, and during this step they remove any partial or incomplete CDR3. This clustering file is the output we used for downstream. Trust4 paper is in https://www.nature.com/articles/s41592-021-01142-2
 
 ### 2)	Removing the Doublets
 
