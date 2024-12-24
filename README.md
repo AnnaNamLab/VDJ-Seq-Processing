@@ -1,11 +1,12 @@
-# Requirements
-
-1) TRUST4 (https://github.com/liulab-dfci/TRUST4)
-2) igblast (https://ncbi.github.io/igblast/cook/How-to-set-up.html)
 
 # VDJ processing
 
 VDJ (Variable, Diversity, and Joining) processing is a key mechanism in the generation of diverse B cell receptors (BCRs), which are essential for the adaptive immune response. The BCR is an antibody anchored on the surface of B cells, recognizing specific antigens through highly variable regions, generated during B cell development. The generation of a diverse B cell receptor (BCR) repertoire is fundamental to the immune system's ability to recognize and respond to a vast array of pathogens. This repository contains all codes related to generating BCR/TCR sequencing, and all downstream analysis.
+
+## Requirements
+
+1) TRUST4 (https://github.com/liulab-dfci/TRUST4)
+2) igblast (https://ncbi.github.io/igblast/cook/How-to-set-up.html)
 
 ## Method)
 
