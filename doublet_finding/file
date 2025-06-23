@@ -1,1 +1,2 @@
-
+The code detects the singlet/doublet/not-assigned cell status based on the number of reads per contigs in each cell.
+For this purpose, kurtosis, normalized_entropy, and confidence level of VDJ assignments are considered.
