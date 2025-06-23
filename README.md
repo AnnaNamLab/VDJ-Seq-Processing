@@ -9,7 +9,7 @@ VDJ (Variable, Diversity, and Joining) processing is a key mechanism in the gene
 2) igblast (https://ncbi.github.io/igblast/cook/How-to-set-up.html)
 3) PhyloPart_v2.1
 
-## Method)
+## Method
 
 Building the phylogenetic tree from BCR data has 5 main steps: generating BCR repertoire using TRUST4, removing the doublets, detecting the dominant clone, correcting the VDJ assignments errors in Hodgkin and Reed-Sternberg (HRS) cells, and building the phylogenetic tree
 
@@ -22,8 +22,11 @@ To reconstruct the BCR repertoire, we have applied TRUST4. TRUST4 is an open-sou
 
 ### 2)	Removing the Doublets
 
-To remove the doublets based on BCR data, we have used the CDR3 raw file from TRUST4. This file contains all the contigs with number of reads that are supporting that. Each cell can be identified as singlet, or noise, or doublet. The histogram of read counts for contigs per each cell defines the status of each cell. For each cell: if the maximum number of supporting reads among all contigs is less than 2, then that cell is labels ‘noise’. If more than 55% of the reads are associated to one contig, then that cell is labeled as ‘singlet’. 
-If more than 55% of the reads are not associated to one contig, then two conditions appear based on the difference of read counts in the top two contigs with highest number of reads: if the difference of read counts in top two contigs is more than a threshold (here we used 0.35), then the cell is labeled as ‘singlet’. But, if the difference of read counts in top two contigs is less than that threshold, then the cell is labeled as ‘doublet’. The singlets need to be intersected with HRS cells or B cells and we do this step per each chain (IGH/IGL/IGK). Then the clustering output from step 1 should be subsetted based on obtained singlets at this step. 
+To remove the doublets based on BCR data, we have used the CDR3 raw file from TRUST4. This file contains all the contigs with number of reads that are supporting that. Each cell can be identified as singlet, or noise, or doublet. The histogram of read counts for contigs per each cell defines the status of each cell. For each cell: if a cell has only one contig, with any number of reads, that cell will be called singlet. If not, then using excess kurtosis, normalized entropy, and confidence level of VDJ assignment, a cell will be called doublet or singlet. If there are  equal or less than 7 reads in cells with 2 or more contigs, then the cell can be called singlet if either of therse conditions are met: either the normalized entropy is small (less than 0.8) or the CDR3 similarity in contigs is less than 0.2. If there are  equal or less than 7 reads in cells with 2 or more contigs, but none of the conditions for CDR3 similarity or small normalized-entorpy are met, then the cell is called Not-Assigned.
+If the excess kurtosis is positive value (not +Inf), then the cell is called singlet. If the excess kurtosis is negative value (not -Inf), then the cell is called doublet. If the kurtosis in +Inf or -Inf,
+
+
+The singlets need to be intersected with HRS cells or B cells and we do this step per each chain (IGH/IGL/IGK). Then the clustering output from step 1 should be subsetted based on obtained singlets at this step. 
 
 
 ### 3)	Detecting the Dominant Clone
