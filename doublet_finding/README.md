@@ -14,5 +14,5 @@ The singlets need to be intersected with HRS cells or B cells and we do this ste
 
 
 <div align="center">
-  <img src="VDJ-processing/doublet_finding/images/doublet_refinement.png" width="500" alt="doublet refinement" />
+  <img src="doublet_refinement.png" width="500" alt="doublet refinement" />
 </div>
