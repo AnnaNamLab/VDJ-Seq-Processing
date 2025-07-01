@@ -12,6 +12,7 @@ If both contigs are high-confident, then the cell-status stays doublet. If the t
 If the CDR3s were similar (Levenshtein distance <= 0.2), then the cell status will change to singlet. But if the CDR3s were not similar, then the cell status stays doublet.
 The singlets need to be intersected with HRS cells or B cells and we do this step per each chain (IGH and IGL/IGK). Then the clustering output from step 1 should be subsetted based on obtained singlets at this step.
 
+
 <div align="center">
-<img src="/Users/saramoein/Documents/new_run_HL_May2025/doublet_refinement.png" width="500" alt="Description" />
+  <img src="images/doublet_refinement.png" width="500" alt="doublet refinement" />
 </div>
