@@ -19,8 +19,8 @@ Building the phylogenetic tree from BCR data has 5 main steps: generating BCR re
 
 1. **Generating BCR Repertoire Using TRUST4**
 1. **Removing the Doublets**
-3.**Detecting the Dominant Clone**
-4.**Correcting the V/D/J Assignments Errors**
-5.**Building the Phylogenetic Tree**
+1. **Detecting the Dominant Clone**
+1. **Correcting the V/D/J Assignments Errors**
+1. **Building the Phylogenetic Tree**
 
 
