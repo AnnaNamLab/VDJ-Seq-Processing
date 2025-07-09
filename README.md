@@ -14,7 +14,7 @@ VDJ (Variable, Diversity, and Joining) processing is a key mechanism in the gene
 Building the phylogenetic tree from BCR data has 5 main steps: generating BCR repertoire using TRUST4, removing the doublets, detecting the dominant clone, correcting the VDJ assignments errors in Hodgkin and Reed-Sternberg (HRS) cells, and building the phylogenetic tree
 
 <div align="center">
-  <img hwidth="545" alt="BCR_steps" src="https://github.com/user-attachments/assets/2d5769f9-1764-46a4-9117-1ef7365244b8" />
+  <img hwidth="300" alt="BCR_steps" src="https://github.com/user-attachments/assets/2d5769f9-1764-46a4-9117-1ef7365244b8" />
 </div>
 <p></p>
 <p>1)  Generating BCR Repertoire Using TRUST4</p>
