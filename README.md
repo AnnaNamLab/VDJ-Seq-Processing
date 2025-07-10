@@ -29,10 +29,17 @@ Building the phylogenetic tree from BCR data has 5 main steps: generating BCR re
 
 Make sure you have R and the required packages installed.
 
-Then run the script from the terminal using:
+Then run the script from the terminal using for BCR:
 
 ```bash
-Rscript .R \
+Rscript doublet_finding_after_refinement_July2025_github.R \
+  --input /path/to/trust4_output_dir \
+  --metadata /path/to/cell_metadata.csv \
+  --sample HL1 \
+  --file HL1_cdr3.out
+
+```bash
+Rscript doublet_finding_after_refinement_July2025_github.R \
   --input /path/to/trust4_output_dir \
   --metadata /path/to/cell_metadata.csv \
   --sample HL1 \
