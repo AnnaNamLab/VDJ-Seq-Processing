@@ -25,4 +25,17 @@ Building the phylogenetic tree from BCR data has 5 main steps: generating BCR re
 1. Correcting the V/D/J Assignments Errors
 1. Building the Phylogenetic Tree
 
+   ## ▶️ How to Run the doublet finding Script
+
+Make sure you have R and the required packages installed.
+
+Then run the script from the terminal using:
+
+```bash
+Rscript doublet_finding.R \
+  --input /path/to/trust4_output_dir \
+  --metadata /path/to/cell_metadata.csv \
+  --sample HL1 \
+  --file HL1_cdr3.out
+
 
