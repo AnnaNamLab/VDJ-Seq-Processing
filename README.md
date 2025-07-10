@@ -38,6 +38,6 @@ Rscript doublet_finding_after_refinement_July2025_github.R \
   --sample HL1 \
   --file HL1_cdr3.out
 
-
+```
 
 This command runs the BCR doublet detection using TRUST4 output and associated metadata.
