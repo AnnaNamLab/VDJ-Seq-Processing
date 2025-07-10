@@ -17,7 +17,7 @@ Building the phylogenetic tree from BCR data has 5 main steps: generating BCR re
   <img width="500" height="280" alt="BCR_steps" src="https://github.com/user-attachments/assets/2d5769f9-1764-46a4-9117-1ef7365244b8" />
 </div>
 
-### BCR processing steps:
+## BCR processing steps:
 
 1. Generating BCR Repertoire Using TRUST4
 1. Removing the Doublets
@@ -25,7 +25,7 @@ Building the phylogenetic tree from BCR data has 5 main steps: generating BCR re
 1. Correcting the V/D/J Assignments Errors
 1. Building the Phylogenetic Tree
 
-## 🧬 Run TRUST4 via SLURM
+# 🧬 Run TRUST4 via SLURM
 
 You can submit TRUST4 jobs to your HPC cluster using the generalized SLURM batch script.
 Before submitting the job, make sure the script is executable:
@@ -39,7 +39,7 @@ sbatch run_trust4_slurm.sh <sample_name> <read1.fastq.gz> <read2.fastq.gz> <outp
 ```
 
 
-## ▶️ How to Run the doublet finding Script
+# ▶️ How to Run the doublet finding Script
 
 Make sure you have R and the required packages installed.
 
