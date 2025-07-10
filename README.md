@@ -19,11 +19,13 @@ Building the phylogenetic tree from BCR data has 5 main steps: generating BCR re
 
 ### BCR processing steps:
 
-1. Generating BCR Repertoire Using TRUST4<br>running trust4.sh code  
-1. Removing the Doublets<br>running the script to detect singlet/ doublets/ not-assigned cell status using the doublet-finding code in BCR
+1. Generating BCR Repertoire Using TRUST4
+1. Removing the Doublets
 1. Detecting the Dominant Clone
 1. Correcting the V/D/J Assignments Errors
 1. Building the Phylogenetic Tree
+
+## To run TRSUT4, please see: tools/run_trust4
 
 ## ▶️ How to Run the doublet finding Script
 
