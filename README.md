@@ -37,12 +37,18 @@ Rscript doublet_finding_after_refinement_July2025_github.R \
   --metadata /path/to/cell_metadata.csv \
   --sample HL1 \
   --file HL1_cdr3.out
-<br> 
+
+> ✅ This opens **one code block** with `bash` syntax highlighting and closes it properly.
+
+---
+
+## 🛠 If You Want It in a Single Line (Optional)
+
+If you prefer the command in one line (no line breaks), use:
+
+```markdown
 ```bash
-Rscript doublet_finding_after_refinement_July2025_github.R \
-  --input /path/to/trust4_output_dir \
-  --metadata /path/to/cell_metadata.csv \
-  --sample HL1 \
-  --file HL1_cdr3.out
+Rscript doublet_finding_after_refinement_July2025_github.R --input /path/to/trust4_output_dir --metadata /path/to/cell_metadata.csv --sample HL1 --file HL1_cdr3.out
+
 
 
