@@ -32,7 +32,7 @@ Make sure you have R and the required packages installed.
 Then run the script from the terminal using:
 
 ```bash
-Rscript doublet_finding.R \
+Rscript .R \
   --input /path/to/trust4_output_dir \
   --metadata /path/to/cell_metadata.csv \
   --sample HL1 \
