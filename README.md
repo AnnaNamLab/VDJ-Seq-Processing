@@ -25,7 +25,19 @@ Building the phylogenetic tree from BCR data has 5 main steps: generating BCR re
 1. Correcting the V/D/J Assignments Errors
 1. Building the Phylogenetic Tree
 
-## To run TRSUT4, please see: tools/run_trust4
+## 🧬 Run TRUST4 via SLURM
+
+You can submit TRUST4 jobs to your HPC cluster using the generalized SLURM batch script.
+Before submitting the job, make sure the script is executable:
+
+```bash
+chmod +x run_trust4_slurm.sh
+```
+Then run run_trust4_slurm.sh
+```bash
+sbatch run_trust4_slurm.sh <sample_name> <read1.fastq.gz> <read2.fastq.gz> <output_prefix>
+```
+
 
 ## ▶️ How to Run the doublet finding Script
 
