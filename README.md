@@ -103,7 +103,7 @@ Rscript heatmap_before_VDJcorrection_March2024.R \
 ### ▶️ Correcting the V/D/J Assignments Errors 
 
 This step uses the igblast tool and fasta file as extra resources to survive the HRS cells with different V,D,J from the dominant clone.
-To run this part the list of HRS contigs are required, based on this pattern "contigs_${sample}_${chain}.txt".
+To run this part, a list of HRS contigs are required, based on this pattern "contigs_${sample}_${chain}.txt".
 
 For example, we subset the HRS contigs in "contigs_HL1_IGL.txt". IGL is  the clonal chain.
 
@@ -119,7 +119,8 @@ AACTGGTCAAACGTGG_22089
 AACTGGTTCTGCTGTC_21948
 
 ```
-To run the igblast, we should run submit_igblast.sh. First making it executable and then run:
+This file should be saved to the directory that *annot.fa (output from trust4) is located.
+Then we should run submit_igblast.sh:
 
 ```bash
 chmod +x submit_igblast.sh
