@@ -85,8 +85,8 @@ Rscript heatmap_before_VDJcorrection_March2024.R
 --metadata /path/to/cell_metadata.csv \
 --input /path/to/trust4_output_dir \
 --cluster_file /path/to/cluster_clone.tsv \
---light_doublet light_chain.csv heavy_chain.csv \
---heavy_doublet light_chain.csv heavy_chain.csv \
+--light_doublet /path/to/light chain doublets \
+--heavy_doublet /path/to/heavy chain doublets \
 
 ```
 An example if run in on local terminal:
