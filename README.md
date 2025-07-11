@@ -92,12 +92,12 @@ Rscript heatmap_before_VDJcorrection_March2024.R
 An example if run in on local terminal:
 ```bash
 Rscript heatmap_before_VDJcorrection_March2024.R \
-  --sample HL12 \
+  --sample HL1 \
   --metadata /Users/saramoein/Documents/new_run_HL_May2025/2024-11-26_CellMetadata_HL1-24incHL8R_RetainedCellsOnly_MainCellTypeAndSubtypeNames.csv \
-  --input /Users/saramoein/Documents/new_run_HL_May2025/HL12 \
+  --input /Users/saramoein/Documents/new_run_HL_May2025/HL1 \
   --cluster_file out_clone_sara.tsv \
-  --light_doublet /Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/HL12_Rawdata_IGK_IGL.csv \
-  --heavy_doublet /Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/HL12_Rawdata_IGH.csv
+  --light_doublet /Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/HL1_Rawdata_IGK_IGL.csv \
+  --heavy_doublet /Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/HL1_Rawdata_IGH.csv
 
 ```
 ### ▶️ Correcting the V/D/J Assignments Errors 
@@ -119,4 +119,11 @@ AACTGGTCAAACGTGG_22089
 AACTGGTTCTGCTGTC_21948
 
 ```
+To run the igblast, we should run submit_igblast.sh. First making it executable and then run:
 
+```bash
+chmod +x submit_igblast.sh
+./submit_igblast.sh <sample> <clone_chain> <path to *annot.fa file as an output of TRUST4>
+```
+
+Here is an example: 
