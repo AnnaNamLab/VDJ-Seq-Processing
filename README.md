@@ -49,7 +49,7 @@ The output is an tsv file.
 python trust-cluster.py <input_cdr3_file> > <output_file>
 
 ```
-For example: 
+The outcome file is used for more downstream analysis and generating the BCR phylogenetic tree.
 
 ### ▶️ How to Run the doublet finding Script
 
