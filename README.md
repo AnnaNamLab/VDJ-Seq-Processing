@@ -37,7 +37,15 @@ Then run run_trust4_slurm.sh
 ```bash
 sbatch run_trust4_slurm.sh <sample_name> <read1.fastq.gz> <read2.fastq.gz> <output_prefix>
 ```
+The cdr3.out file from TRUST4 is then applied as the input of trust-cluster.py for clustering similar CDR3 sequences.
+To do this, first move to the directory where you have you copied trust-cluster.py, and provide cdr3.out as input.
+The output is an tsv file.
 
+```bash
+python trust-cluster.py <input_cdr3_file> > <output_file>
+
+```
+For example: 
 
 ### ▶️ How to Run the doublet finding Script
 
