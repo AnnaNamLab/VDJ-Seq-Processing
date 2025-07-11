@@ -1,4 +1,4 @@
-
+# Load required libraries
 library(dplyr)
 library(ggplot2)
 library(Biostrings)
@@ -13,6 +13,44 @@ library(phangorn)
 ### we first run trust4, then getting cdr3_raw.out file
 ### doublets and noise cells are removed. Only Bcells and HRS cells are included.
 ###setting the directory
+
+args <- commandArgs(trailingOnly = TRUE)
+
+# Parse command line arguments
+library(optparse)
+option_list <- list(
+  make_option(c("-s", "--sample"), type = "character", help = "Sample name"),
+  make_option(c("-m", "--metadata"), type = "character", help = "Path to cell metadata CSV file"),
+  make_option(c("-i", "--input"), type = "character", help = "path to output of trust4"),
+  make_option(c("-c", "--cluster_file"), type = "character", help = "output from trust-cluster.py file name (e.g., cluster_clone.tsv)"),
+  make_option(c("-l", "--light_doublet"), type = "character", help = "output from doublets on light chain (e.g., HL1_Rawdata_IGK_IGL.csv)"),
+  make_option(c("-v", "--heavy_doublet"), type = "character", help = "output from doublets on light chain (e.g., HL1_Rawdata_IGH.csv)")
+)
+
+opt_parser <- OptionParser(option_list = option_list)
+opt <- parse_args(opt_parser)
+
+# Check for required arguments
+if (is.null(opt$input) || is.null(opt$metadata) || is.null(opt$sample) || is.null(opt$cluster_file) || is.null(opt$light_doublet) ||is.null(opt$heavy_doublet)) {
+  stop("Please provide --input, --metadata, --sample, and --file arguments.")
+}
+
+
+
+sample <- opt$sample
+metadata_file <- opt$metadata
+input_directory <- opt$input
+trust4_cluster_clone <- opt$cluster_file
+light_chain_cellStatus <- opt$light_doublet
+heavy_chain_cellStatus <- opt$heavy_doublet
+
+
+# -----------------------
+# Set working directory
+# -----------------------
+dir.create(input_directory, showWarnings = FALSE)
+setwd(input_directory)
+
 
 ### generating the entropy of the sequences. IF the entropy is high, then the biology model for very different number gives NaN or zeros.
 calculate_entropy <- function(alignment_matrix) {
@@ -29,13 +67,16 @@ calculate_entropy <- function(alignment_matrix) {
   return(entropies)
 }
 
-sample="HL10"
-dir.create(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample))
-setwd(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample))
+
+
+#sample="HL10"
+#dir.create(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample))
+#setwd(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample))
 ### reading the cell types from GEX
 
 
-new_clusters= read.csv('/Users/saramoein/Documents/new_run_HL_Jan2025/2024-11-26_CellMetadata_HL1-24incHL8R_RetainedCellsOnly_MainCellTypeAndSubtypeNames.csv')
+#new_clusters= read.csv('/Users/saramoein/Documents/new_run_HL_Jan2025/2024-11-26_CellMetadata_HL1-24incHL8R_RetainedCellsOnly_MainCellTypeAndSubtypeNames.csv')
+new_clusters= read.csv(metadata_file)
 new_clusters$cell_id1=sub("^.*_([A-Z]+)-.*$", "\\1", new_clusters$Full.cell_id)
 
 
@@ -43,7 +84,8 @@ new_clusters$cell_id1=sub("^.*_([A-Z]+)-.*$", "\\1", new_clusters$Full.cell_id)
 sample_HRS_Bcells=new_clusters[new_clusters$Patient== sample & new_clusters$MainCelltype %in% c("HRS", "Bcells"),]
 sample_HRS=new_clusters[new_clusters$Patient== sample & new_clusters$MainCelltype %in% c("HRS"),]
 ### after running TRUST4 clustering, we pull from HPC the outcome 
-FILTERED_out_clone= read.table(Sys.glob('*clone*.tsv')[1],header= FALSE, sep='\t')
+#FILTERED_out_clone= read.table(Sys.glob('*clone*.tsv')[1],header= FALSE, sep='\t')
+FILTERED_out_clone= read.table(trust4_cluster_clone,header= FALSE, sep='\t')
 colnames(FILTERED_out_clone)=c("consensus_id",	"index_within_consensus",	"V_gene",	"D_gene",	"J_gene",	"C_gene",	"CDR1",	"CDR2",	"CDR3",	"CDR3_score",	"read_fragment_count", "CDR3_germline_similarity", "full_length_assembly","contig_id","s" )
 
 
@@ -65,8 +107,9 @@ for (chain in c("IGL","IGK", "IGH")){
   if (chain=="IGL" | chain=="IGK"){
     
      # # 
-     pilot_cellStatus_file= read.csv(Sys.glob(paste0('/Users/saramoein/Documents/new_run_HL_May2025/REPEAT_other_doublets_BCR_thre07_ent08//',sample,'_Rawdata_IGK_IGL.csv')))
-     singlet= unique(pilot_cellStatus_file$cell_id1[pilot_cellStatus_file$final_ReadStatus=="singlet"])
+     #pilot_cellStatus_file= read.csv(Sys.glob(paste0('/Users/saramoein/Documents/new_run_HL_May2025/Final_doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGK_IGL.csv')))
+    pilot_cellStatus_file= read.csv(light_chain_cellStatus) 
+    singlet= unique(pilot_cellStatus_file$cell_id1[pilot_cellStatus_file$final_ReadStatus=="singlet"])
      
      sample_trust4_per_chain$VDJ= paste0(sample_trust4_per_chain$V_gene," ",sample_trust4_per_chain$J_gene)
      ind=match(sample_trust4_per_chain$cell_id1,sample_HRS_Bcells$cell_id1)
@@ -84,8 +127,8 @@ for (chain in c("IGL","IGK", "IGH")){
      }
      
     }else{
-      pilot_cellStatus_file= read.csv(Sys.glob(paste0('/Users/saramoein/Documents/new_run_HL_May2025/REPEAT_other_doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGH.csv')))
-      
+      #pilot_cellStatus_file= read.csv(Sys.glob(paste0('/Users/saramoein/Documents/new_run_HL_May2025/Final_doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGH.csv')))
+      pilot_cellStatus_file= read.csv(heavy_chain_cellStatus) 
       singlet= unique(pilot_cellStatus_file$cell_id1[pilot_cellStatus_file$final_ReadStatus=="singlet"])
    
      sample_trust4_per_chain$VDJ= paste0(sample_trust4_per_chain$V_gene," ",sample_trust4_per_chain$D_gene," ",sample_trust4_per_chain$J_gene)
@@ -195,4 +238,6 @@ write.csv(table(data_IGH$MainCelltype),'data_IGH_HRS.csv')
 table(data_IGK$MainCelltype)
 table(data_IGL$MainCelltype)
 table(data_IGH$MainCelltype)
+
+
 
