@@ -103,6 +103,20 @@ Rscript heatmap_before_VDJcorrection_March2024.R \
 ### ▶️ Correcting the V/D/J Assignments Errors 
 
 This step uses the igblast tool and fasta file as extra resources to survive the HRS cells with different V,D,J from the dominant clone.
-To run this part the list of HRS barcodes are required: 
+To run this part the list of HRS contigs are required, based on this pattern "contigs_${sample}_${chain}.txt".
 
+For example, we subset the HRS contigs in "contigs_HL1_IGL.txt". IGL is  the clonal chain.
+
+```bash
+AAACGGGCAAAGTGCG_21556
+AAACGGGCAGTCAGAG_21980
+AAACGGGGTATCAGTC_21656
+AAAGATGGTTGGTTTG_22094
+AAAGCAAAGTGGTAGC_21648
+AAATGCCTCTCTGTCG_21695
+AACGTTGGTAAGTTCC_21525
+AACTGGTCAAACGTGG_22089
+AACTGGTTCTGCTGTC_21948
+
+```
 
