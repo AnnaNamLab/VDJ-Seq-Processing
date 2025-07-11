@@ -128,5 +128,5 @@ chmod +x submit_igblast.sh
 
 Here is an example: 
 ```bash
-./submit_igblast.sh HL8 IGL /athena/namlab/scratch/sam4032/HL8_s1s2/HL8_T4_Output_2024_01_04
+./submit_igblast.sh HL1 IGL /athena/namlab/scratch/sam4032/HL1_s1s2/HL1_T4_Output_2024_01_04
 ```
