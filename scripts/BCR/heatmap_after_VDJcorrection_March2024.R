@@ -1,4 +1,8 @@
+# we first run trust4, then getting cdr3_raw.out file
+### doublets and noise cells are removed. Only Bcells and HRS cells are included.
+###setting the directory
 
+# Load required libraries
 library(dplyr)
 library(ggplot2)
 library(Biostrings)
@@ -9,17 +13,57 @@ library(insect)
 library(aphid)
 library(ape)
 library(phangorn)
-# we first run trust4, then getting cdr3_raw.out file
+
+### we first run trust4, then getting cdr3_raw.out file
 ### doublets and noise cells are removed. Only Bcells and HRS cells are included.
 ###setting the directory
 
-for (sample in c("HL10")){
-      DominantChain="IGK"
-      setwd(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample))
+args <- commandArgs(trailingOnly = TRUE)
+
+# Parse command line arguments
+library(optparse)
+option_list <- list(
+  make_option(c("-s", "--sample"), type = "character", help = "Sample name"),
+  make_option(c("-m", "--metadata"), type = "character", help = "Path to cell metadata CSV file"),
+  make_option(c("-i", "--input"), type = "character", help = "path to output of trust4"),
+  make_option(c("-d", "--DominantChain"), type = "character", help = "dominant chian"),
+  make_option(c("-l", "--light_doublet"), type = "character", help = "output from doublets on light chain (e.g., HL1_Rawdata_IGK_IGL.csv)"),
+  make_option(c("-v", "--heavy_doublet"), type = "character", help = "output from doublets on light chain (e.g., HL1_Rawdata_IGH.csv)")
+)
+
+opt_parser <- OptionParser(option_list = option_list)
+opt <- parse_args(opt_parser)
+
+# Check for required arguments
+if (is.null(opt$input) || is.null(opt$metadata) || is.null(opt$sample) || is.null(opt$DominantChain) || is.null(opt$light_doublet) ||is.null(opt$heavy_doublet)) {
+  stop("Please provide --input, --metadata, --sample, and --file arguments.")
+}
+
+
+
+sample <- opt$sample
+metadata_file <- opt$metadata
+input_directory <- opt$input
+DominantChain <- opt$DominantChain
+light_chain_cellStatus <- opt$light_doublet
+heavy_chain_cellStatus <- opt$heavy_doublet
+
+
+# -----------------------
+# Set working directory
+# -----------------------
+dir.create(input_directory, showWarnings = FALSE)
+setwd(input_directory)
+
+
+#for (sample in c("HL10")){
+      #DominantChain="IGK"
+      #setwd(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample))
       
       
       ### reading the cell types from GEX
-      new_clusters= read.csv('/Users/saramoein/Documents/new_run_HL_May2025/2024-11-26_CellMetadata_HL1-24incHL8R_RetainedCellsOnly_MainCellTypeAndSubtypeNames.csv')
+      #new_clusters= read.csv('/Users/saramoein/Documents/new_run_HL_May2025/2024-11-26_CellMetadata_HL1-24incHL8R_RetainedCellsOnly_MainCellTypeAndSubtypeNames.csv')
+      new_clusters= read.csv(metadata_file)
       new_clusters$cell_id1=sub("^.*_([A-Z]+)-.*$", "\\1", new_clusters$Full.cell_id)
       
       
@@ -28,7 +72,9 @@ for (sample in c("HL10")){
       sample_HRS_Bcells=new_clusters[new_clusters$Patient== sample & new_clusters$MainCelltype %in% c("HRS", "Bcells"),]
       
       ### after running TRUST4 clustering, we pull from HPC the outcome; this file contains the corrected V/D/J genes onlu for HRS cells. So we need to merge it with the full file output from trust4 clustering
+     # sample_trust4_per_chain= read.csv(paste0(sample,'_FILTERED_out_clone_dominantChain_',DominantChain,'.csv'))
       sample_trust4_per_chain= read.csv(paste0(sample,'_FILTERED_out_clone_dominantChain_',DominantChain,'.csv'))
+      
       sample_trust4_per_chain= sample_trust4_per_chain %>% group_by(cell_id1) %>% dplyr::slice(which.max(read_fragment_count)) 
       colnames(sample_trust4_per_chain)[1:16]=c("X","consensus_id",	"index_within_consensus",	"V_gene",	"D_gene",	"J_gene",	"C_gene",	"CDR1",	"CDR2",	"CDR3",	"CDR3_score",	"read_fragment_count", "CDR3_germline_similarity", "full_length_assembly","contig_id","s" )
       
@@ -40,8 +86,8 @@ for (sample in c("HL10")){
        # singlet_low_confidential= read.table(Sys.glob(paste0('./doublets/combined_light_chains_automated/','*_low_confident_singlet_IGL_IGK_read_thre1.txt'))[1])
        # singlet= read.table(Sys.glob(paste0('./doublets/combined_light_chains_automated/','*_singlet_IGL_IGK_read_thre1.txt'))[2])
        # doublet= read.table(Sys.glob(paste0('./doublets/combined_light_chains_automated/','*_doublet_IGL_IGK_read_thre1.txt')))
-        pilot_cellStatus_file= read.csv(Sys.glob(paste0('/Users/saramoein/Documents/new_run_HL_May2025/REPEAT_other_doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGK_IGL.csv')))
-        
+       # pilot_cellStatus_file= read.csv(Sys.glob(paste0('/Users/saramoein/Documents/new_run_HL_May2025/REPEAT_other_doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGK_IGL.csv')))
+        pilot_cellStatus_file= read.csv(light_chain_cellStatus) 
         singlet= unique(pilot_cellStatus_file$cell_id1[pilot_cellStatus_file$final_ReadStatus=="singlet"])
         
         sample_trust4_per_chain$VDJ= paste0(sample_trust4_per_chain$corrected_Vgene," ",sample_trust4_per_chain$corrected_Jgene)
@@ -55,8 +101,8 @@ for (sample in c("HL10")){
         # singlet= read.table(Sys.glob(paste0('./doublets/combined_light_chains_automated/','*_singlet_IGH_read_thre1.txt'))[2])
         # doublet= read.table(Sys.glob(paste0('./doublets/combined_light_chains_automated/','*_doublet_IGH_read_thre1.txt')))
         # 
-        pilot_cellStatus_file= read.csv(Sys.glob(paste0('/Users/saramoein/Documents/new_run_HL_May2025/REPEAT_other_doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGK_IGL.csv')))
-        
+       # pilot_cellStatus_file= read.csv(Sys.glob(paste0('/Users/saramoein/Documents/new_run_HL_May2025/REPEAT_other_doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGH.csv')))
+        pilot_cellStatus_file= read.csv(heavy_chain_cellStatus) 
         singlet= unique(pilot_cellStatus_file$cell_id1[pilot_cellStatus_file$final_ReadStatus=="singlet"])
         
         sample_trust4_per_chain$VDJ= paste0(sample_trust4_per_chain$corrected_Vgene," ",sample_trust4_per_chain$corrected_Dgene," ",sample_trust4_per_chain$corrected_Jgene)
@@ -117,5 +163,5 @@ for (sample in c("HL10")){
         dev.off() 
         
         
-}
+#}
 
