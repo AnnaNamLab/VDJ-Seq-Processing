@@ -49,7 +49,7 @@ The output is an tsv file.
 python trust-cluster.py <input_cdr3_file> > <output_file>
 
 ```
-The outcome file is used for more downstream analysis and generating the BCR phylogenetic tree.
+The outcome file (cluster_clone.tsv) is used for more downstream analysis and generating the BCR phylogenetic tree.
 
 ### ▶️ How to Run the doublet finding Script
 
@@ -76,4 +76,25 @@ Rscript TCRdoublet_finding_after_refinement_May2025.R \
   --file HL1_cdr3.out
 
 ```
+### Detecting the dominant clone 
+To detect the cancer clone the heatmap of the CDR3 sequences helps to detcte the most dominant V,D,J.
+With ethis code: 
+```bash
+Rscript heatmap_before_VDJcorrection_March2024.R
+--sample HL1 \
+--metadata /path/to/cell_metadata.csv \
+--input /path/to/trust4_output_dir \
+--cluster_file /path/to/cluster_clone.tsv \
+--light_doublet light_chain.csv heavy_chain.csv \
+--heavy_doublet light_chain.csv heavy_chain.csv \
+
+```
+An example if run in on local terminal:
+Rscript heatmap_before_VDJcorrection_March2024.R \
+  --sample HL12 \
+  --metadata /Users/saramoein/Documents/new_run_HL_May2025/2024-11-26_CellMetadata_HL1-24incHL8R_RetainedCellsOnly_MainCellTypeAndSubtypeNames.csv \
+  --input /Users/saramoein/Documents/new_run_HL_May2025/HL12 \
+  --cluster_file out_clone_sara.tsv \
+  --light_doublet /Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/HL12_Rawdata_IGK_IGL.csv \
+  --heavy_doublet /Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/HL12_Rawdata_IGH.csv
 
