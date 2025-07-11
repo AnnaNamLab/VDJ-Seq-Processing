@@ -9,6 +9,33 @@ library(stringdist)
 library(ggplot2)
 
 
+args <- commandArgs(trailingOnly = TRUE)
+
+# Parse command line arguments
+library(optparse)
+option_list <- list(
+  make_option(c("-i", "--input"), type = "character", help = "Path to TRUST4 output directory"),
+  make_option(c("-m", "--metadata"), type = "character", help = "Path to cell metadata CSV file"),
+  make_option(c("-s", "--sample"), type = "character", help = "Sample name"),
+  make_option(c("-f", "--file"), type = "character", help = "cdr3.out file name (e.g., sample_cdr3.out)")
+)
+
+opt_parser <- OptionParser(option_list = option_list)
+opt <- parse_args(opt_parser)
+
+# Check for required arguments
+if (is.null(opt$input) || is.null(opt$metadata) || is.null(opt$sample) || is.null(opt$file)) {
+  stop("Please provide --input, --metadata, --sample, and --file arguments.")
+}
+
+# Assign input paths
+input_dir <- opt$input
+metadata_file <- opt$metadata
+sample <- opt$sample
+cdr3_file <- opt$file
+
+
+
 get_overlap_by_type <- function(df1, df2, dataset_name) {
   df1_HRS <- df1 %>% filter(cellType == "HRS") %>% select(cell_id1) %>% distinct()
   df2_HRS <- df2 %>% filter(cellType == "HRS") %>% select(cell_id1) %>% distinct()
@@ -54,30 +81,6 @@ normalized_entropy <- function(x) {
   -sum(probs * log(probs)) / log(length(probs))
 }
 
-args <- commandArgs(trailingOnly = TRUE)
-
-# Parse command line arguments
-library(optparse)
-option_list <- list(
-  make_option(c("-i", "--input"), type = "character", help = "Path to TRUST4 output directory"),
-  make_option(c("-m", "--metadata"), type = "character", help = "Path to cell metadata CSV file"),
-  make_option(c("-s", "--sample"), type = "character", help = "Sample name"),
-  make_option(c("-f", "--file"), type = "character", help = "cdr3.out file name (e.g., sample_cdr3.out)")
-)
-
-opt_parser <- OptionParser(option_list = option_list)
-opt <- parse_args(opt_parser)
-
-# Check for required arguments
-if (is.null(opt$input) || is.null(opt$metadata) || is.null(opt$sample) || is.null(opt$file)) {
-  stop("Please provide --input, --metadata, --sample, and --file arguments.")
-}
-
-# Assign input paths
-input_dir <- opt$input
-metadata_file <- opt$metadata
-sample <- opt$sample
-cdr3_file <- opt$file
 
 
 thre=0.7
