@@ -100,6 +100,9 @@ Rscript heatmap_before_VDJcorrection_March2024.R \
   --heavy_doublet /Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/HL12_Rawdata_IGH.csv
 
 ```
+### ▶️ Correcting the V/D/J Assignments Errors 
 
+This step uses the igblast tool and fasta file as extra resources to survive the HRS cells with different V,D,J from the dominant clone.
+To run this part the list of HRS barcodes are required: 
 
 
