@@ -25,7 +25,7 @@ library(optparse)
 option_list <- list(
   make_option(c("-s", "--sample"), type = "character", help = "Sample name"),
   make_option(c("-m", "--metadata"), type = "character", help = "Path to cell metadata CSV file"),
-  make_option(c("-i", "--input"), type = "character", help = "path to output of trust4"),
+  make_option(c("-i", "--input"), type = "character", help = "path to output of VDJ_correction step"),
   make_option(c("-d", "--DominantChain"), type = "character", help = "dominant chian"),
   make_option(c("-l", "--light_doublet"), type = "character", help = "output from doublets on light chain (e.g., HL1_Rawdata_IGK_IGL.csv)"),
   make_option(c("-v", "--heavy_doublet"), type = "character", help = "output from doublets on light chain (e.g., HL1_Rawdata_IGH.csv)")
@@ -43,7 +43,7 @@ if (is.null(opt$input) || is.null(opt$metadata) || is.null(opt$sample) || is.nul
 
 sample <- opt$sample
 metadata_file <- opt$metadata
-input_directory <- opt$input
+input_file <- opt$input
 DominantChain <- opt$DominantChain
 light_chain_cellStatus <- opt$light_doublet
 heavy_chain_cellStatus <- opt$heavy_doublet
@@ -73,8 +73,8 @@ setwd(input_directory)
       
       ### after running TRUST4 clustering, we pull from HPC the outcome; this file contains the corrected V/D/J genes onlu for HRS cells. So we need to merge it with the full file output from trust4 clustering
      # sample_trust4_per_chain= read.csv(paste0(sample,'_FILTERED_out_clone_dominantChain_',DominantChain,'.csv'))
-      sample_trust4_per_chain= read.csv(paste0(sample,'_FILTERED_out_clone_dominantChain_',DominantChain,'.csv'))
       
+      sample_trust4_per_chain= read.csv(input_file)
       sample_trust4_per_chain= sample_trust4_per_chain %>% group_by(cell_id1) %>% dplyr::slice(which.max(read_fragment_count)) 
       colnames(sample_trust4_per_chain)[1:16]=c("X","consensus_id",	"index_within_consensus",	"V_gene",	"D_gene",	"J_gene",	"C_gene",	"CDR1",	"CDR2",	"CDR3",	"CDR3_score",	"read_fragment_count", "CDR3_germline_similarity", "full_length_assembly","contig_id","s" )
       
