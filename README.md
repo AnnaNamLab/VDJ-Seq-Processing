@@ -155,3 +155,5 @@ Rscript heatmap_after_VDJcorrection_March2024.R \
   --light_doublet /Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/HL1_Rawdata_IGK_IGL.csv \
   --heavy_doublet /Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/HL1_Rawdata_IGH.csv
 ```
+### ▶️ Generating phylogenetic tree
+To generate the phylogenetic tree
