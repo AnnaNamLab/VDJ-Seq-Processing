@@ -144,16 +144,18 @@ Rscript heatmap_after_VDJcorrection_March2024.R
 --DominantChain dominant chian that contains the clone \
 --light_doublet /path/to/light chain doublets.csv \
 --heavy_doublet /path/to/heavy chain doublets.csv \
+--output /path/to/output_folder
 ```
 An example if run in on local terminal:
 ```bash
 Rscript heatmap_after_VDJcorrection_March2024.R \
   --sample HL1 \
   --metadata /Users/saramoein/Documents/new_run_HL_May2025/2024-11-26_CellMetadata_HL1-24incHL8R_RetainedCellsOnly_MainCellTypeAndSubtypeNames.csv \
-  --input /Users/saramoein/Documents/new_run_HL_May2025/HL1_FILTERED_out_clone_dominantChain_HL1.csv' \
+  --input /Users/saramoein/Documents/new_run_HL_May2025/HL1/HL1_FILTERED_out_clone_dominantChain_HL1.csv' \
   --DominantChain IGL \
   --light_doublet /Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/HL1_Rawdata_IGK_IGL.csv \
-  --heavy_doublet /Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/HL1_Rawdata_IGH.csv
+  --heavy_doublet /Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/HL1_Rawdata_IGH.csv \
+  --output /Users/saramoein/Documents/new_run_HL_May2025/HL1
 ```
 ### ▶️ Generating phylogenetic tree
 To generate the phylogenetic tree
