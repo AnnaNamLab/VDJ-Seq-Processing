@@ -16,7 +16,7 @@ library(phangorn)
 
 ### we first run trust4, then getting cdr3_raw.out file
 ### doublets and noise cells are removed. Only Bcells and HRS cells are included.
-###setting the directory
+### setting the directory
 
 args <- commandArgs(trailingOnly = TRUE)
 
@@ -28,41 +28,38 @@ option_list <- list(
   make_option(c("-i", "--input"), type = "character", help = "path to output of VDJ_correction step"),
   make_option(c("-d", "--DominantChain"), type = "character", help = "dominant chian"),
   make_option(c("-l", "--light_doublet"), type = "character", help = "output from doublets on light chain (e.g., HL1_Rawdata_IGK_IGL.csv)"),
-  make_option(c("-v", "--heavy_doublet"), type = "character", help = "output from doublets on light chain (e.g., HL1_Rawdata_IGH.csv)")
+  make_option(c("-v", "--heavy_doublet"), type = "character", help = "output from doublets on light chain (e.g., HL1_Rawdata_IGH.csv)"),
+  make_option(c("-o", "--output"), type = "character", help = "output directory ")
 )
 
 opt_parser <- OptionParser(option_list = option_list)
 opt <- parse_args(opt_parser)
 
 # Check for required arguments
-if (is.null(opt$input) || is.null(opt$metadata) || is.null(opt$sample) || is.null(opt$DominantChain) || is.null(opt$light_doublet) ||is.null(opt$heavy_doublet)) {
+if (is.null(opt$output) || is.null(opt$input) || is.null(opt$metadata) || is.null(opt$sample) || is.null(opt$DominantChain) || is.null(opt$light_doublet) ||is.null(opt$heavy_doublet)) {
   stop("Please provide --input, --metadata, --sample, and --file arguments.")
 }
 
 
-
 sample <- opt$sample
 metadata_file <- opt$metadata
+input_directory <- 
 input_file <- opt$input
 DominantChain <- opt$DominantChain
 light_chain_cellStatus <- opt$light_doublet
 heavy_chain_cellStatus <- opt$heavy_doublet
+output <- opt$output
+
 
 
 # -----------------------
 # Set working directory
 # -----------------------
-dir.create(input_directory, showWarnings = FALSE)
-setwd(input_directory)
+#dir.create(output, showWarnings = FALSE)
+setwd(output)
 
 
-#for (sample in c("HL10")){
-      #DominantChain="IGK"
-      #setwd(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample))
-      
-      
-      ### reading the cell types from GEX
-      #new_clusters= read.csv('/Users/saramoein/Documents/new_run_HL_May2025/2024-11-26_CellMetadata_HL1-24incHL8R_RetainedCellsOnly_MainCellTypeAndSubtypeNames.csv')
+
       new_clusters= read.csv(metadata_file)
       new_clusters$cell_id1=sub("^.*_([A-Z]+)-.*$", "\\1", new_clusters$Full.cell_id)
       
@@ -163,5 +160,4 @@ setwd(input_directory)
         dev.off() 
         
         
-#}
 
