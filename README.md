@@ -158,4 +158,4 @@ Rscript heatmap_after_VDJcorrection_March2024.R \
   --output /Users/saramoein/Documents/new_run_HL_May2025/HL1
 ```
 ### ▶️ Generating phylogenetic tree
-To generate the phylogenetic tree
+To generate the phylogenetic tree, use this line: 
