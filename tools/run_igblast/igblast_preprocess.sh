@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --partition=scu-gpu
+#SBATCH --partition=scu-cpu
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --job-name=igblast
@@ -12,7 +12,7 @@
 # -----------------------------
 sample="$1"         # e.g., HL8
 chain="$2"          # e.g., IGL
-working_dir="$3"    # e.g., /athena/.../HL8_T4_Output_2024_01_04
+working_dir="$3"    # e.g., /athena/.../HL8_T4_Output_2024_01_04; the folder that contains the *annot.fa from trust4
 
 if [[ -z "$sample" || -z "$chain" || -z "$working_dir" ]]; then
   echo "Usage: sbatch run_igblast.sh <sample> <chain> <working_dir>"
