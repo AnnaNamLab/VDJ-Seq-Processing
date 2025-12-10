@@ -20,7 +20,7 @@ metadata_file = "/Users/saramoein/Documents/new_run_HL_May2025/2025-07-03_CellMe
 input_file = paste0(sample,'_FILTERED_out_clone_dominantChain_',DominantChain,'.csv')
 light_chain_cellStatus = Sys.glob(paste0('/Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGK_IGL.csv'))
 heavy_chain_cellStatus = Sys.glob(paste0('/Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGHL.csv'))
-output = paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample)
+output_directory = paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample)
 
 
 
@@ -29,7 +29,7 @@ output = paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample)
 # Set working directory
 # -----------------------
 
-setwd(output)
+setwd(output_directory)
 
 
 ### reading the cell types from GEX
