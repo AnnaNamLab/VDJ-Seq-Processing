@@ -30,7 +30,7 @@ cd "$working_dir" || {
 # -----------------------------
 # Locate *_annot.fa file
 # -----------------------------
-annot_fa=$(ls *_annot.fa 2>/dev/null | head -n 1)
+annot_fa=$(ls singleline*_annot.fa 2>/dev/null | head -n 1)
 
 if [[ -z "$annot_fa" ]]; then
   echo "Error: No *_annot.fa file found in $working_dir"
