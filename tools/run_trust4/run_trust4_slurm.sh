@@ -31,7 +31,7 @@ BC_WHITELIST="/path/to/737K-august-2016.txt"
 cd /path/to/your/working/directory/$SAMPLE
 
 # ----------- Run TRUST4 -------------------
-$TRUST4_EXEC \
+$TRUST4_EXEC: \
   -f "$REF_FASTA" \
   --ref "$VJ_REF" \
   -u "$READ2" \
