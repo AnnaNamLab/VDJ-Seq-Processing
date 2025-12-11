@@ -37,13 +37,10 @@ The singlets need to be intersected with HRS cells or B cells and we do this ste
 
 After removing the doublets from step 2, we identify the dominant clone per each chain. The dominant clone is the clone with the majority of HRS cells with same V/D/J assignment. We put no threshold for similarity of CDR3, since that causes to remove some of the HRS cells from the cancer clone, while we know that HRS cells are part of the clone. The dominant V/D/J on each chain will be recorded for the next step. 
 
-### 4)	Correcting the V/D/J Assignments Errors
+### 4)	Refining the V/D/J Assignments Errors
 
 Form the output of the step 3 for detecting the dominant V/D/J, it happens that some of the HRS cells are carrying a different V/D/J comparing to dominant clone. One possible reason is about the errors during V/D/J gene identification after alignment of contigs to the sequences from IMGT database. To correct these errors, we extracted the contigs of HRS cells, and using the fasta file, which is one of the outcomes of TRUST4, started to extract new V/D/J assignments. From IgBlast, the top 3 V/D/J genes are extracted. Then for every HRS cell, if obtained IgBlast V/D/Js are the same of dominant V/D/J, then we correct the error from TRUST4. We, also explore the fasta file per each of the contigs, and if any of the top 3 V/D/Js are among the detected V/D/J for that contig, we correct that. That means per each contig any of the top 3 V/D/J obtained from IgBlast are neighbors of the dominant clone and that can still show that the cell belongs to the dominant clone. After correcting the V/D/Js per chain, we re-extracted all the contigs with similar V/D/J as the dominant clone and took it for generating the phylogenetic tree. 
 
 ### 5)	Building the Phylogenetic Tree
 
-After extracting the HRS cells with similar V/D/J to the dominant clone and adding other HRS cells with not-similar V/D/J to the dominant clone, we use them to generate the phylogenetic tree. Phylogenetic tree is a diagram that shows the evolutionary relationships between CDR3/full-sequences of BCR. We used a maximum likelihood phylogenetic tree from Ape package in R [3]. The tree aims to put the sequences with highest similarity in the same clade based on genetic distances that are calculated using a substitution model. We used F81 substitution model for calculating the distances between nucleotides, since it is one of the wildly been used models for generating phylogenetic tree [4]. We generated the phylogenetic tree based on CDR3 and then annotated the cell states on each node on the tree. Also, we can identify the V/D/J assignments on the tree, or other BCR parameters to investigate their evolutionary process.
-
-
-
+IgPhyML was used on unique CDR3 sequences after preprocessing and checking the validity of the sequences based on start and stop codons.
