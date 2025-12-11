@@ -109,7 +109,7 @@ Here is an example:
 ./submit_igblast.sh HL1 IGL /athena/namlab/scratch/sam4032/HL1_s1s2/HL1_T4_Output_2024_01_04
 ```
 After running igblast, FIX_VDJ_BCR_step1_step2_igblast.R is run. 
-After running this code, the new heatmap after potential correction of VDJs can be generated.
+
 
 
 ### Generating phylogenetic tree
