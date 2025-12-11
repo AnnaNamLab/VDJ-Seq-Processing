@@ -101,12 +101,12 @@ Then we should run submit_igblast.sh:
 
 ```bash
 chmod +x submit_igblast.sh
-./submit_igblast.sh <sample> <clone_chain> <path to *annot.fa file as an output of TRUST4>
+./igblast_preprocess.sh <sample> <clone_chain> <path to *annot.fa file as an output of TRUST4>
 ```
 
 Here is an example: 
 ```bash
-./submit_igblast.sh HL1 IGL /athena/namlab/scratch/sam4032/HL1_s1s2/HL1_T4_Output_2024_01_04
+./igblast_preprocess.sh HL1 IGL /athena/namlab/scratch/sam4032/HL1_s1s2/HL1_T4_Output_2024_01_04
 ```
 After running igblast, FIX_VDJ_BCR_step1_step2_igblast.R is run. 
 
