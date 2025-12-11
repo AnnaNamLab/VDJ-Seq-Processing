@@ -1,5 +1,5 @@
 
-# Single-Cell BCR Sequencing Analysis
+# Single-Cell VDJ processing
 
 The B cell receptor (BCR) is a membrane-bound antibody that recognizes specific antigens via highly variable regions formed during B cell development. This diversity, generated through V(D)J recombination, is essential for effective adaptive immunity. This repository contains all code for BCR/TCR sequence generation and downstream analysis.
 
@@ -51,7 +51,7 @@ python trust-cluster.py <input_cdr3_file> > <output_file>
 ```
 The outcome file (cluster_clone.tsv) is used for more downstream analysis and generating the BCR phylogenetic tree.
 
-### ▶️ How to Run the doublet finding Script
+### How to run the doublet finding Script
 
 Make sure you have R and the required packages installed.
 
@@ -77,7 +77,7 @@ Rscript TCRdoublet_finding_after_refinement_May2025.R \
 
 ```
 
-### ▶️ Correcting the V/D/J Assignments Errors (optional)
+### Refining the V/D/J Assignments Errors (optional)
 
 This step uses the igblast tool and fasta file as extra resources to survive the HRS cells with different V,D,J from the dominant clone.
 To run this part, a list of HRS contigs are required, based on this pattern "contigs_${sample}_${chain}.txt".
@@ -112,5 +112,5 @@ After running igblast, FIX_VDJ_BCR_step1_step2_igblast.R is run.
 After running this code, the new heatmap after potential correction of VDJs can be generated.
 
 
-### ▶️ Generating phylogenetic tree
+### Generating phylogenetic tree
 To generate the phylogenetic tree, use this line: 
