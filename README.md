@@ -29,7 +29,7 @@ More details about the steps are provided in the workflow folder.
 
 
 
-### ▶️ Run TRUST4 via SLURM
+### Run TRUST4 via SLURM
 
 You can submit TRUST4 jobs to your HPC cluster using the generalized SLURM batch script.
 Before submitting the job, make sure the script is executable:
