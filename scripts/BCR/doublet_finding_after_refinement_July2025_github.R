@@ -399,21 +399,7 @@ dir.create(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sub_folder,'/
      ### if the  the cell has only 1 contig, and 1 read, then kurtosis is NaN. That cell is called singlet.
     vdj_counts$ReadStatus[which((vdj_counts$ent =="NaN")  & (vdj_counts$kurtosis=="NaN" ) & (vdj_counts$unique_vdjcall_count==1) )] = "singlet"
     
-    
-   
-    # weak_data_vdj_counother_doublet = vdj_counts[which(((vdj_counts$ent>entropy_ther) & (vdj_counts$ent!= "NaN"))  & (vdj_counts$kurtosis=="Inf" | vdj_counts$kurtosis=="-Inf" ) & vdj_counts$total_reads >7 ),]
-    # weak_data_vdj_count_NA = vdj_counts[which(((vdj_counts$ent>entropy_ther) & (vdj_counts$ent!= "NaN"))  & (vdj_counts$kurtosis=="Inf" | vdj_counts$kurtosis=="-Inf" | vdj_counts$kurtosis=="NaN") & vdj_counts$total_reads <=7 ),]
-    # 
-    # sub_n1 <- nrow(weak_data_vdj_counother_doublet)
-    # sub_n2 <- nrow(weak_data_vdj_count_NA)
-    # total_n <- nrow(vdj_counts)
-    # other_n <- total_n - sub_n1-sub_n2
-    
-    # if (sub_n2/total_n < 0.03){
-    #   vdj_counts$ReadStatus[which(((vdj_counts$ent>entropy_ther) & (vdj_counts$ent!= "NaN")) & ((vdj_counts$kurtosis=="Inf") | (vdj_counts$kurtosis=="NaN")) & (vdj_counts$total_reads<=7) )] = "Not_Assigned"
-    #   vdj_counts$ReadStatus[which(((vdj_counts$ent>entropy_ther) & (vdj_counts$ent!= "NaN")) & (vdj_counts$kurtosis=="-Inf" ) & (vdj_counts$total_reads<=7) )] = "Not_Assigned"
-    #   print("smaller")
-    # } else {
+  
     
       ###### cells with insufficient number of reads (7 reads) need to be investigated. First based on entropy. If entropy is low, then the cell is singlet. If the 
       ##### entropy is high, then we use the similarity of CDR3s. If they are similar, then the cells is singlet. Eles the cell is Not-Assigned
