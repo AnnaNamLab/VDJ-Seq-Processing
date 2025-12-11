@@ -15,7 +15,7 @@ chain="$2"          # e.g., IGL
 working_dir="$3"    # e.g., /athena/.../HL8_T4_Output_2024_01_04; the folder that contains the *annot.fa from trust4
 
 if [[ -z "$sample" || -z "$chain" || -z "$working_dir" ]]; then
-  echo "Usage: sbatch run_igblast.sh <sample> <chain> <working_dir>"
+  echo "Usage: sbatch igblast_preprocess.sh <sample> <chain> <working_dir>"
   exit 1
 fi
 
@@ -30,7 +30,7 @@ cd "$working_dir" || {
 # -----------------------------
 # Locate *_annot.fa file
 # -----------------------------
-annot_fa=$(ls singleline*_annot.fa 2>/dev/null | head -n 1)  ### trust4 annot.fa file
+annot_fa=$(ls *_annot.fa 2>/dev/null | head -n 1)  ### trust4 annot.fa file
 
 if [[ -z "$annot_fa" ]]; then
   echo "Error: No *_annot.fa file found in $working_dir"
