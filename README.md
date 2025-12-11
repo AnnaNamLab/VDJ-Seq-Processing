@@ -100,7 +100,7 @@ This file should be saved to the directory that *annot.fa (output from trust4) i
 Then we should run submit_igblast.sh:
 
 ```bash
-chmod +x submit_igblast.sh
+chmod +x igblast_preprocess.sh
 ./igblast_preprocess.sh <sample> <clone_chain> <path to *annot.fa file as an output of TRUST4>
 ```
 
@@ -116,8 +116,17 @@ After running igblast, FIX_VDJ_BCR_step1_step2_igblast.R is run.
 To generate the phylogenetic tree, use this line: 
 
 
-Ref:
-[1] Song L, Cohen D, Ouyang Z, Cao Y, Hu X, Liu XS. TRUST4: immune repertoire reconstruction from bulk and single-cell RNA-seq data. Nat Methods. 2021 Jun;18(6):627-630. doi: 10.1038/s41592-021-01142-2. Epub 2021 May 13. PMID: 33986545; PMCID: PMC9328942.
-[2] Ye J, Ma N, Madden TL, Ostell JM. IgBLAST: an immunoglobulin variable domain sequence analysis tool. Nucleic Acids Res. 2013 Jul;41(Web Server issue):W34-40. doi: 10.1093/nar/gkt382. Epub 2013 May 13. PMID: 23671333; PMCID: PMC3692102.
-[3] Hoehn KB, Lunter G, Pybus OG - A Phylogenetic Codon Substitution Model for Antibody Lineages. Genetics 2017 206(1):417-427 https://doi.org/10.1534/genetics.116.196303
-[4] Hoehn KB, Vander Heiden JA, Zhou JQ, Lunter G, Pybus OG, Kleinstein SHK - Repertoire-wide phylogenetic models of B cell molecular evolution reveal evolutionary signatures of aging and vaccination. bioRxiv 2019 https://doi.org/10.1101/558825
+#!/bin/bash
+
+cat << 'EOF'
+References
+----------
+
+1. Song L, Cohen D, Ouyang Z, Cao Y, Hu X, Liu XS. TRUST4: immune repertoire reconstruction from bulk and single-cell RNA-seq data. Nat Methods. 2021;18(6):627-630. doi:10.1038/s41592-021-01142-2.
+
+2. Ye J, Ma N, Madden TL, Ostell JM. IgBLAST: an immunoglobulin variable domain sequence analysis tool. Nucleic Acids Res. 2013;41(W34–40). doi:10.1093/nar/gkt382.
+
+3. Hoehn KB, Lunter G, Pybus OG. A Phylogenetic Codon Substitution Model for Antibody Lineages. Genetics. 2017;206(1):417–427. https://doi.org/10.1534/genetics.116.196303
+
+4. Hoehn KB, Vander Heiden JA, Zhou JQ, Lunter G, Pybus OG, Kleinstein SH. Repertoire-wide phylogenetic models of B cell molecular evolution reveal evolutionary signatures of aging and vaccination. bioRxiv. 2019. https://doi.org/10.1101/558825
+EOF
