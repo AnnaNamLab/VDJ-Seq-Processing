@@ -77,7 +77,7 @@ Rscript TCRdoublet_finding_after_refinement_May2025.R \
 
 ```
 
-### Refining the V/D/J Assignments Errors (optional)
+### Refining the V/D/J Assignments (optional)
 
 This step uses the igblast tool and fasta file as extra resources to survive the HRS cells with different V,D,J from the dominant clone.
 To run this part, a list of HRS contigs are required, based on this pattern "contigs_${sample}_${chain}.txt".
