@@ -76,30 +76,7 @@ Rscript TCRdoublet_finding_after_refinement_May2025.R \
   --file HL1_cdr3.out
 
 ```
-### ▶️ Detecting the dominant clone 
-To detect the cancer clone the heatmap of the CDR3 sequences helps to detcte the most dominant V,D,J.
-With ethis code: 
-```bash
-Rscript heatmap_before_VDJcorrection_March2024.R
---sample HL1 \
---metadata /path/to/cell_metadata.csv \
---input /path/to/trust4_output_dir \
---cluster_file /path/to/cluster_clone.tsv \
---light_doublet /path/to/light chain doublets \
---heavy_doublet /path/to/heavy chain doublets \
 
-```
-An example if run in on local terminal:
-```bash
-Rscript heatmap_before_VDJcorrection_March2024.R \
-  --sample HL1 \
-  --metadata /Users/saramoein/Documents/new_run_HL_May2025/2024-11-26_CellMetadata_HL1-24incHL8R_RetainedCellsOnly_MainCellTypeAndSubtypeNames.csv \
-  --input /Users/saramoein/Documents/new_run_HL_May2025/HL1 \
-  --cluster_file out_clone_sara.tsv \
-  --light_doublet /Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/HL1_Rawdata_IGK_IGL.csv \
-  --heavy_doublet /Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/HL1_Rawdata_IGH.csv
-
-```
 ### ▶️ Correcting the V/D/J Assignments Errors (optional)
 
 This step uses the igblast tool and fasta file as extra resources to survive the HRS cells with different V,D,J from the dominant clone.
@@ -134,28 +111,6 @@ Here is an example:
 After running igblast, FIX_VDJ_BCR_step1_step2_igblast.R is run. 
 After running this code, the new heatmap after potential correction of VDJs can be generated.
 
-### ▶️ Heatmap after VDJ correction 
-If you have run the step for correcting the VDJ assignment, then you will have a heatmap based on the corrected VDJs. For that, run:  
-```bash
-Rscript heatmap_after_VDJcorrection_March2024.R
---sample HL1 \
---metadata /path/to/cell_metadata.csv \
---input /path/to/VDJ correction output.csv \
---DominantChain dominant chian that contains the clone \
---light_doublet /path/to/light chain doublets.csv \
---heavy_doublet /path/to/heavy chain doublets.csv \
---output /path/to/output_folder
-```
-An example if run in on local terminal:
-```bash
-Rscript heatmap_after_VDJcorrection_March2024.R \
-  --sample HL1 \
-  --metadata /Users/saramoein/Documents/new_run_HL_May2025/2024-11-26_CellMetadata_HL1-24incHL8R_RetainedCellsOnly_MainCellTypeAndSubtypeNames.csv \
-  --input /Users/saramoein/Documents/new_run_HL_May2025/HL1/HL1_FILTERED_out_clone_dominantChain_HL1.csv' \
-  --DominantChain IGL \
-  --light_doublet /Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/HL1_Rawdata_IGK_IGL.csv \
-  --heavy_doublet /Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/HL1_Rawdata_IGH.csv \
-  --output /Users/saramoein/Documents/new_run_HL_May2025/HL1
-```
+
 ### ▶️ Generating phylogenetic tree
 To generate the phylogenetic tree, use this line: 
