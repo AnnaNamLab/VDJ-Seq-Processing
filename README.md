@@ -113,10 +113,7 @@ After running igblast, FIX_VDJ_BCR_step1_step2_igblast.R is run.
 
 
 ### Generating phylogenetic tree
-To generate the phylogenetic tree, use this line: 
-
-
-#!/bin/bash
+To generate the phylogenetic tree, IgPhyML package is used. The scripts are available in the "tools" fodler.
 
 
 References
