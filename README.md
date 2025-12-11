@@ -5,9 +5,9 @@ The B cell receptor (BCR) is a membrane-bound antibody that recognizes specific 
 
 ## Requirements
 
-1) TRUST4 (https://github.com/liulab-dfci/TRUST4) [ref]
-2) igblast (https://ncbi.github.io/igblast/cook/How-to-set-up.html) [ref]
-3) PhyloPart_v2.1 (https://sourceforge.net/projects/phylopart/) [ref]
+1) TRUST4 (https://github.com/liulab-dfci/TRUST4) [1]
+2) igblast (https://ncbi.github.io/igblast/cook/How-to-set-up.html) [2]
+3) IgPhyML (https://github.com/immcantation/igphyml) [3,4]
 
 ## Method
 
