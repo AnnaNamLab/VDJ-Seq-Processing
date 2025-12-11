@@ -118,7 +118,7 @@ To generate the phylogenetic tree, use this line:
 
 #!/bin/bash
 
-cat << 'EOF'
+
 References
 ----------
 
