@@ -51,7 +51,7 @@ python trust-cluster.py <input_cdr3_file> > <output_file>
 ```
 The outcome file (cluster_clone.tsv) is used for more downstream analysis and generating the BCR phylogenetic tree.
 
-### How to run the doublet finding Script
+### How to run the doublet finding step
 
 Make sure you have R and the required packages installed.
 
@@ -77,7 +77,7 @@ Rscript TCRdoublet_finding_after_refinement_May2025.R \
 
 ```
 
-### Refining the V/D/J Assignments (optional)
+### Refining the V/D/J assignments 
 
 This step uses the igblast tool and fasta file as extra resources to survive the HRS cells with different V,D,J from the dominant clone.
 To run this part, a list of HRS contigs are required, based on this pattern "contigs_${sample}_${chain}.txt".
@@ -113,8 +113,23 @@ After running igblast, FIX_VDJ_BCR_step1_step2_igblast.R is run.
 
 
 ### Generating phylogenetic tree
-To generate the phylogenetic tree, IgPhyML package is used. The scripts are available in the "tools" fodler.
 
+To generate the phylogenetic tree, IgPhyML package is used. To install it, please refere to: https://igphyml.readthedocs.io/en/latest/install.html
+After installation, copy you CDR3_preprocessed_MAFFT_aligned.fa to your working directory and run the below script:
+
+```bash
+sbatch igphyml_run.sh HL1
+```
+make sure that igphyml_run.sh is modifed based on the directory where igphyml is installed.
+you can interactively run the IgPhyML if the number of CDR3 sequences is low. Here is an example:
+
+```
+sample=HL1
+/athena/namlab/scratch/sam4032/CDR3_tree/igphyml/src/igphyml \
+ -i /athena/namlab/scratch/sam4032/CDR3_tree/singleCDR3/$sample/sampled_unique_sequences_${sample}.fasta \
+ -m GY \
+ --run_id singleCDR3_$sample
+```
 
 References
 ----------
