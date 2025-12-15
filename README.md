@@ -24,12 +24,11 @@ Building the phylogenetic tree from BCR data has 5 main steps: generating BCR re
 <div align="left">
   <img width="500" height="280" alt="BCR_steps" src="https://github.com/user-attachments/assets/2d5769f9-1764-46a4-9117-1ef7365244b8" />
 </div>
-<div align="left">
-  <a href="assets/myfile.pdf"> <!-- link to PDF -->
-    <img width="500" height="280" alt="My PDF Preview" src="https://github.com/AnnaNamLab/VDJ-Seq-Processing/workflow/flowchaart_BCR.pdf?raw=true" />
-  </a>
-</div>
 
+
+<div align="left">
+  <a href="workflow/BCR_flowchart.pdf">📄 View BCR workflow (PDF)</a>
+</div>
 More details about the steps are provided in the workflow folder.
 
 
