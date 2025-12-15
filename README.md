@@ -115,7 +115,7 @@ After running igblast, FIX_VDJ_BCR_step1_step2_igblast.R is run.
 ### Generating phylogenetic tree
 
 To generate the phylogenetic tree, IgPhyML package is used. To install it, please refere to: https://igphyml.readthedocs.io/en/latest/install.html
-The input of igphyml is generated from the 'heatmap_after_VDJcorrection_Dec2025.R'.
+The input of igphyml is generated from  running heatmap_after_VDJcorrection_Dec2025.R and  then IgPhyML_fasta_prepration.R. 
 After installation, copy you CDR3_preprocessed_MAFFT_aligned.fa to your working directory and run the below script:
 
 ```bash
@@ -131,6 +131,7 @@ sample=HL1
  -m GY \
  --run_id singleCDR3_$sample
 ```
+The igphyml tree downstream anlysis will be then performed by running igphyml_downStream.R. 
 
 References
 ----------
