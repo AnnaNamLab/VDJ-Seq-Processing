@@ -58,7 +58,7 @@ Make sure you have R and the required packages installed.
 Then run the script from the terminal using for BCR:
 
 ```bash
-Rscript doublet_finding_after_refinement_July2025_github.R \
+Rscript doublet_finding_BCR.R \
   --input /path/to/trust4_output_dir \
   --metadata /path/to/cell_metadata.csv \
   --sample HL1 \
@@ -69,7 +69,7 @@ Rscript doublet_finding_after_refinement_July2025_github.R \
 This command runs the BCR doublet detection using TRUST4 output and associated metadata.
 For TCR: 
 ```bash
-Rscript TCRdoublet_finding_after_refinement_May2025.R \
+Rscript doublet_finding_TCR.R \
   --input /path/to/trust4_output_dir \
   --metadata /path/to/cell_metadata.csv \
   --sample HL1 \
@@ -108,14 +108,14 @@ Here is an example:
 ```bash
 ./igblast_preprocess.sh HL1 IGL /athena/namlab/scratch/sam4032/HL1_s1s2/HL1_T4_Output_2024_01_04
 ```
-After running igblast, FIX_VDJ_BCR_step1_step2_igblast.R is run. 
+After running igblast, refining_VDJ_BCR.R is run. 
 
 
 
 ### Generating phylogenetic tree
 
 To generate the phylogenetic tree, IgPhyML package is used. To install it, please refere to: https://igphyml.readthedocs.io/en/latest/install.html
-The input of igphyml is generated from  running heatmap_after_VDJcorrection_Dec2025.R and  then IgPhyML_fasta_prepration.R. 
+The input of igphyml is generated from  running heatmap_after_VDJcorrection.R and  then IgPhyML_fasta_prepration.R. 
 After installation, copy you CDR3_preprocessed_MAFFT_aligned.fa to your working directory and run the below script:
 
 ```bash
