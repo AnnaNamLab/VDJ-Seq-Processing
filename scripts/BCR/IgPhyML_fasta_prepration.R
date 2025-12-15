@@ -1,4 +1,6 @@
 library(dplyr)
+library(ggplot2)
+library(Biostrings)
 
 sample="HL1"
 DominantChain="IGL"
@@ -13,7 +15,7 @@ filtered_BCR_processed= filtered_BCR_processed %>% group_by(cell_id1) %>% dplyr:
 
 ### read singlet
 
-pilot_cellStatus_file= read.csv(Sys.glob(paste0('/Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGK_IGL.csv')))
+pilot_cellStatus_file= read.csv(Sys.glob(paste0('./doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGK_IGL.csv')))
 singlet= unique(pilot_cellStatus_file$cell_id1[pilot_cellStatus_file$final_ReadStatus=="singlet"])
 filtered_BCR_processed= filtered_BCR_processed[filtered_BCR_processed$cell_id1 %in% singlet,]
 
@@ -220,8 +222,8 @@ names(full_aligned_sequences_fixed) <- names(full_aligned_sequences)
 #BrowseSeqs(full_aligned_sequences_fixed , htmlFile = paste0("./igphyml_modelGY_NNNstopCodon_MAFFT_validCodon_semiRefined/semiRefined_ExpandedCloneChange/MAFFTaligned_StopCodonNNN_CDR3_sequences_",sample,"_new_corrected_validCodon.html"))
 
 
-####### generating list of seqs based on unique CDR3
-seqs <- full_aligned_sequences_fixed  #readDNAStringSet(paste0("./igphyml_modelGY_NNNstopCodon_MAFFT_validCodon_semiRefined/singleCDR3_final/MAFFTaligned_StopCodonNNN_CDR3_sequences_",sample,"_new_corrected_validCodon_fixed.fasta"))
+#generating list of seqs based on unique CDR3
+seqs <- full_aligned_sequences_fixed  
 
 df <- data.frame(
   header = names(seqs),
