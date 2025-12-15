@@ -62,7 +62,7 @@ Rscript doublet_finding_after_refinement_July2025_github.R \
   --input /path/to/trust4_output_dir \
   --metadata /path/to/cell_metadata.csv \
   --sample HL1 \
-  --file HL1_cdr3.out
+  --file /path/to/HL1_cdr3.out
 
 ```
 
@@ -73,7 +73,7 @@ Rscript TCRdoublet_finding_after_refinement_May2025.R \
   --input /path/to/trust4_output_dir \
   --metadata /path/to/cell_metadata.csv \
   --sample HL1 \
-  --file HL1_cdr3.out
+  --file /path/to/HL1_cdr3.out
 
 ```
 
