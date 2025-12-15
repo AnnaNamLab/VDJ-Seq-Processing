@@ -22,22 +22,16 @@ Building the phylogenetic tree from BCR data has 5 main steps: generating BCR re
 1. Building the Phylogenetic Tree
 
 <div align="left">
-  <img width="500" height="280" alt="BCR_steps" src="https://github.com/user-attachments/assets/2d5769f9-1764-46a4-9117-1ef7365244b8" />
-</div>
-
-
-<div align="left">
-  <a href="workflow/BCR_flowchart.pdf">📄 View BCR workflow (PDF)</a>
-</div>
-More details about the steps are provided in the workflow folder.
-<div align="left">
   <img
-    width="500"
-    height="280"
+    width="800"
+    height="800"
     alt="BCR workflow"
     src="workflow/BCR_flowchart.png"
   />
 </div>
+
+More details about the steps are provided in the workflow folder.
+
 
 
 ### Run TRUST4 via SLURM
