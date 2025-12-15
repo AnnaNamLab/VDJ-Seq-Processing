@@ -141,7 +141,7 @@ invalid_contig= setdiff(filtered_BCR_processed$contig_id , df_filtered$contig_id
 write.table(filtered_BCR_processed[filtered_BCR_processed$contig_id %in% invalid_contig,],paste0("./igphyml_modelGY_NNNstopCodon_MAFFT_validCodon_semiRefined/singleCDR3_final/InvalidContigs.csv") )
 
 filtered_BCR_processed = df_filtered
-
+#generating list of seqs based on unique CDR3
 seqs <- readDNAStringSet(paste0("./igphyml_modelGY_NNNstopCodon_MAFFT_validCodon_semiRefined/singleCDR3_final/MAFFTaligned_StopCodonNNN_CDR3_sequences_",sample,"_new_corrected_validCodon_fixed.fasta"))
 
 df <- data.frame(
@@ -162,6 +162,10 @@ sampled_df <- do.call(rbind, sampled_list)
 # Convert back to DNAStringSet
 sampled_seqs <- DNAStringSet(sampled_df$sequence)
 names(sampled_seqs) <- sampled_df$header
+
+write.csv(filtered_BCR_processed , 'filtered_BCR_processed.csv')
+# Write to new FASTA
+writeXStringSet(sampled_seqs, paste0("./igphyml_modelGY_NNNstopCodon_MAFFT_validCodon_semiRefined/singleCDR3_final/sampled_unique_sequences_",sample,".fasta"))
 
 
 
