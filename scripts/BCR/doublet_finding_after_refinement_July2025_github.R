@@ -88,7 +88,7 @@ thre=0.7 ## the dominancy of singlet threshold
 entropy_ther=0.8 ## the entropy threshold
 
 ## the output folder
-sub_folder= "TEST_doublets_BCR_thre07_ent08"
+sub_folder= "doublets_BCR_thre07_ent08"
 dir.create(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample,'/',sub_folder))
 dir.create(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample,'/',sub_folder,'/percentage'))
 
