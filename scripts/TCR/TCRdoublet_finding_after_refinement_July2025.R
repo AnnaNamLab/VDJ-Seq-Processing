@@ -106,8 +106,6 @@ dir.create(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample,'_TCR,
 
   
   #### extracting the Bcell, Tcell and HRS from GEX data
-  
-  #new_clusters= read.csv('/Users/saramoein/Documents/new_run_HL_May2025/2024-11-26_CellMetadata_HL1-24incHL8R_RetainedCellsOnly_MainCellTypeAndSubtypeNames.csv')
   new_clusters <- read.csv(metadata_file)
   
   new_clusters$cell_id1=sub("^.*_([A-Z]+)-.*$", "\\1", new_clusters$Full.cell_id)
