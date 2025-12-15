@@ -90,7 +90,7 @@ new_clusters$cell_id1=sub("^.*_([A-Z]+)-.*$", "\\1", new_clusters$Full.cell_id)
 
 ### read singlet
 
-pilot_cellStatus_file= read.csv(Sys.glob(paste0('/Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGK_IGL.csv')))
+pilot_cellStatus_file= read.csv(Sys.glob(paste0('./doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGK_IGL.csv')))
 singlet= unique(pilot_cellStatus_file$cell_id1[pilot_cellStatus_file$final_ReadStatus=="singlet"])
 
 
@@ -98,7 +98,7 @@ filtered_BCR_processed = read.csv(paste0('filtered_BCR_processed.csv'))
 
 ########## reading the tree from IgPhyML
 
-tree= read.tree(paste0("/Users/saramoein/Documents/new_run_HL_May2025/",sample,'/igphyml_modelGY_NNNstopCodon_MAFFT_validCodon_semiRefined/singleCDR3_final/sampled_unique_sequences_',sample,'.fasta_igphyml_tree_singleCDR3_',sample,'.txt'))
+tree= read.tree(paste0('./igphyml_modelGY_NNNstopCodon_MAFFT_validCodon_semiRefined/singleCDR3_final/sampled_unique_sequences_',sample,'.fasta_igphyml_tree_singleCDR3_',sample,'.txt'))
 tree <- ladderize(tree)
 ##########NEED TO EXPAND THE TREE
 
@@ -342,7 +342,7 @@ long_clade_contigs= summarized_filtered_BCR_processed_filtered$contig_id[which(s
 
 ######REMOVING THE CONTIG_ID ON THE MAIN CLADE THAT ARE NOT THE SAME AS DOMINANT CDR3
 
-seq= readDNAStringSet(paste0("./igphyml_modelGY_NNNstopCodon_MAFFT_validCodon_semiRefined/singleCDR3_final/MAFFTaligned_StopCodonNNN_CDR3_sequences_",sample,"_new_corrected_validCodon_fixed.fasta"))
+seq= readDNAStringSet(paste0("./igphyml_modelGY_NNNstopCodon_MAFFT_validCodon_semiRefined/singleCDR3_final/MAFFTaligned_StopCodonNNN_CDR3_sequences_",sample,"_new_corrected_validCodon.fasta"))
 fasta_names <- names(seq)
 fasta_names= gsub(" missing","missing",fasta_names)
 fasta_names= gsub(" start and stop valid","startandstopvalid", fasta_names)
@@ -357,9 +357,7 @@ BrowseSeqs(seq_ordered,paste0('/Users/saramoein/Documents/new_run_HL_May2025/',s
 
 library(pagedown)
 
-outfile_html <- paste0('/Users/saramoein/Documents/new_run_HL_May2025/',
-                       sample,
-                       '/igphyml_modelGY_NNNstopCodon_MAFFT_validCodon_semiRefined/singleCDR3_final/msa_seq_validCodon_fixed.html')
+outfile_html <- paste0('./igphyml_modelGY_NNNstopCodon_MAFFT_validCodon_semiRefined/singleCDR3_final/msa_seq_validCodon_fixed.html')
 
 outfile_pdf <- sub("\\.html$", ".pdf", outfile_html)
 
