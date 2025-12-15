@@ -86,16 +86,11 @@ normalized_entropy <- function(x) {
 thre=0.7
 entropy_ther=0.8
 sub_folder= "TEST_doublets_TCR_thre07_ent08"
-dir.create(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sub_folder))
-dir.create(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sub_folder,'/percentage'))
+dir.create(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample,'_TCR',sub_folder))
+dir.create(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample,'_TCR,sub_folder,'/percentage'))
 
-
-#for (sample in c("HL1","HL10","HL21","HL8","HL8R","HL15","HL20","HL16","HL12")){
-  
-  
-  #setwd(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample,"_TCR"))
   setwd(input_dir)
-  #dir.create('./doublets_TCR_08ther/combined_lTRBt_chains_automated')
+  
   
   ### using the trust4 raw_cdr3.out file as the input
   #out_FR2_cdr3=read.table(Sys.glob("*cdr3.out"),sep='\t')
@@ -483,7 +478,7 @@ dir.create(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sub_folder,'/
     
     # if TRB, then the CDR1 and CDR2 has different length comparing to IGL/IGK
     if (j==2){
-      write.csv(vdj_counts,paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sub_folder,'/',sample,"_TRB_",'countVDJ_perCELL_AfterInfFixing_POLISH_addingNA','.csv'),row.names = FALSE )#sep='\t',row.names=FALSE, col.names = FALSE, quote=FALSE
+      write.csv(vdj_counts,paste0('./',sub_folder,'/',sample,"_TRB_",'countVDJ_perCELL_AfterInfFixing_POLISH_addingNA','.csv'),row.names = FALSE )#sep='\t',row.names=FALSE, col.names = FALSE, quote=FALSE
       
       ind_high= which((rawCDR3_ALLcells$status_impute =="doublet") & (rawCDR3_ALLcells$complete_vdj_assembly==1))
       ind_med= which((rawCDR3_ALLcells$status_impute =="doublet") &  (rawCDR3_ALLcells$CDR1_length <= 23  | rawCDR3_ALLcells$CDR2_length <= 20 | (rawCDR3_ALLcells$complete_vdj_assembly==0)) & (rawCDR3_ALLcells$CDR1_length !=1  | rawCDR3_ALLcells$CDR2_length !=1))
@@ -493,7 +488,7 @@ dir.create(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sub_folder,'/
       rawCDR3_ALLcells$doublet_confidence[ind_low]="doublet_low"
       
     }else{
-      write.csv(vdj_counts,paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sub_folder,'/',sample,"_TRA_",'countVDJ_perCELL_AfterInfFixing_POLISH_addingNA','.csv'), row.names = FALSE)#sep='\t',row.names=FALSE, col.names = FALSE, quote=FALSE
+      write.csv(vdj_counts,paste0('./',sub_folder,'/',sample,"_TRA_",'countVDJ_perCELL_AfterInfFixing_POLISH_addingNA','.csv'), row.names = FALSE)#sep='\t',row.names=FALSE, col.names = FALSE, quote=FALSE
       
       ind_high= which(rawCDR3_ALLcells$status_impute =="doublet"  & (rawCDR3_ALLcells$complete_vdj_assembly==1))
       ind_med= which(rawCDR3_ALLcells$status_impute =="doublet" &  (rawCDR3_ALLcells$CDR1_length <= 17  | rawCDR3_ALLcells$CDR2_length <= 8 | (rawCDR3_ALLcells$complete_vdj_assembly==0)) & (rawCDR3_ALLcells$CDR1_length !=1  | rawCDR3_ALLcells$CDR2_length !=1))
@@ -593,7 +588,7 @@ dir.create(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sub_folder,'/
     ind_HRS= which(rawCDR3_ALLcells$cellType %in% c("HRS"))
     rawCDR3_ALLcells$final_ReadStatus[ind_HRS]="singlet"
     
-    write.csv(rawCDR3_ALLcells ,paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sub_folder,'/',sample,"_Rawdata_",chain_name,".csv"),row.names = FALSE )#sep='\t',row.names=FALSE, col.names = FALSE, quote=FALSE
+    write.csv(rawCDR3_ALLcells ,paste0('./',sub_folder,'/',sample,"_Rawdata_",chain_name,".csv"),row.names = FALSE )#sep='\t',row.names=FALSE, col.names = FALSE, quote=FALSE
     
     ind_status = match(vdj_counts$cell_id1, rawCDR3_ALLcells$cell_id1)
     vdj_counts$final_ReadStatus= rawCDR3_ALLcells$final_ReadStatus[ind_status]
@@ -709,12 +704,12 @@ dir.create(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sub_folder,'/
     
     
     #### saving the noise/singlet/doublets to output files
-    pdf(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sub_folder,'/',sample,"_insufficient_reads_cellType_status_AfterInfFixing_POLISH_addingNA_",chain_name,".pdf"), width=20, height=10)  
+    pdf(paste0('./',sub_folder,'/',sample,"_insufficient_reads_cellType_status_AfterInfFixing_POLISH_addingNA_",chain_name,".pdf"), width=20, height=10)  
     # Assume p, q, z, z1 may or may not exist or may be NULL
       print(a0)
     
     dev.off()
-    pdf(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sub_folder,'/',sample,"_insufficient_reads_cellType_status_AfterInfFixing_POLISH_addingNA_distributions_",chain_name,".pdf"), width=40, height=100)  
+    pdf(paste0('./',sub_folder,'/',sample,"_insufficient_reads_cellType_status_AfterInfFixing_POLISH_addingNA_distributions_",chain_name,".pdf"), width=40, height=100)  
       print(c0)
       print(c1)
       print(c2)
@@ -756,14 +751,14 @@ dir.create(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sub_folder,'/
     theme_minimal(base_size = 14)
   
   
-  write.csv(result$Tcells_common , paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sub_folder,'/',sample,"_final_Tcell_doublet_common_light_heavy.csv"))
-  write.csv(result$HRS_all , paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sub_folder,'/',sample,"_final_HRS_doublet_either_light_or_heavy.csv"))
+  write.csv(result$Tcells_common , paste0('./',sub_folder,'/',sample,"_final_Tcell_doublet_common_light_heavy.csv"))
+  write.csv(result$HRS_all , paste0('./',sub_folder,'/',sample,"_final_HRS_doublet_either_light_or_heavy.csv"))
   
  
 
-  pdf(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sub_folder,"/percentage/",sample,"_doublet_overlap_in_chains_per_celltype",".pdf"))
+  pdf(paste0('./',sub_folder,"/percentage/",sample,"_doublet_overlap_in_chains_per_celltype",".pdf"))
   print(w1)
   dev.off()
   
-#}
+
 
