@@ -217,9 +217,8 @@ pad_to_multiple_of_3 <- function(seq) {
 full_aligned_sequences_fixed <- DNAStringSet(sapply(full_aligned_sequences, pad_to_multiple_of_3))
 names(full_aligned_sequences_fixed) <- names(full_aligned_sequences)
 # Save the aligned sequences
-#writeXStringSet(full_aligned_sequences_fixed, paste0("./igphyml_modelGY_NNNstopCodon_MAFFT_validCodon_semiRefined/semiRefined_ExpandedCloneChange/MAFFTaligned_StopCodonNNN_CDR3_sequences_",sample,"_new_corrected_validCodon.fasta"))
-
-#BrowseSeqs(full_aligned_sequences_fixed , htmlFile = paste0("./igphyml_modelGY_NNNstopCodon_MAFFT_validCodon_semiRefined/semiRefined_ExpandedCloneChange/MAFFTaligned_StopCodonNNN_CDR3_sequences_",sample,"_new_corrected_validCodon.html"))
+writeXStringSet(full_aligned_sequences_fixed, paste0("./igphyml_modelGY_NNNstopCodon_MAFFT_validCodon_semiRefined/semiRefined_ExpandedCloneChange/MAFFTaligned_StopCodonNNN_CDR3_sequences_",sample,"_new_corrected_validCodon.fasta"))
+BrowseSeqs(full_aligned_sequences_fixed , htmlFile = paste0("./igphyml_modelGY_NNNstopCodon_MAFFT_validCodon_semiRefined/semiRefined_ExpandedCloneChange/MAFFTaligned_StopCodonNNN_CDR3_sequences_",sample,"_new_corrected_validCodon.html"))
 
 
 #generating list of seqs based on unique CDR3
