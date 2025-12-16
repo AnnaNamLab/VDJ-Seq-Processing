@@ -1,7 +1,9 @@
 
 # Single-Cell VDJ processing
 
-The B cell receptor (BCR) is a membrane-bound antibody that recognizes specific antigens via highly variable regions formed during B cell development. This diversity, generated through V(D)J recombination, is essential for effective adaptive immunity. This repository contains all code for BCR/TCR sequence generation and downstream analysis.
+The B cell receptor (BCR) and T cell receptor (TCR) are antigen-recognition receptors of the adaptive immune system. BCRs recognize antigens directly through membrane-bound immunoglobulins, whereas TCRs recognize peptide antigens presented by major histocompatibility complex (MHC) molecules. Both receptors achieve extraordinary diversity through V(D)J recombination during lymphocyte development, enabling precise and robust immune responses.
+
+This repository contains all code for BCR and TCR sequence generation, processing, quality control, and downstream analysis.
 
 ## Requirements
 
