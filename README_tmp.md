@@ -183,6 +183,8 @@ Here is an example:
 
 Next, the V(D)J annotations are refined using the outputs of TRUST4 and Igblast with `refining_VDJ_BCR.R`
 
+The above step results in `<TABLE_FILE_NAME>`. This table is cleaned to keep relevant columns and to re-evaluate the expanded clones after V(D)J refinement, using the following script `scripts/BCR/heatmap_after_VDJcorrection.R`
+
 
 ### Building the phylogenetic tree
 
