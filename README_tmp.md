@@ -63,18 +63,17 @@ Doublets were identified based on the principle of allelic exclusion using the f
 Example `cell_metadata.csv`:
 <details>
   <summary>See `cell_metadata.csv` example</summary>
-  ```bash
-  Full.cell_id,MainCelltype,SubtypeName,Patient
-  AAACGGGCAAAGTGCG,HRS,State1,Sample1
-  AAACGGGCAGTCAGAG,HRS,State2,Sample1
-  AAACGGGGTATCAGTC,HRS,State1,Sample1
-  AAAGATGGTTGGTTTG,HRS,State3,Sample1
-  AAAGCAAAGTGGTAGC,HRS,State1,Sample1
-  AAATGCCTCTCTGTCG,HRS,State4,Sample1
-  AACGTTGGTAAGTTCC,HRS,State1,Sample1
-  AACTGGTCAAACGTGG,HRS,State2,Sample1
-  AACTGGTTCTGCTGTC,HRS,State1,Sample1
-  ```
+| Full.cell_id | MainCelltype | SubtypeName | Patient |
+|---|---|---|---|
+| AAACGGGCAAAGTGCG | HRS | State1 | Sample1 |
+| AAACGGGCAGTCAGAG | HRS | State2 | Sample1 |
+| AAACGGGGTATCAGTC | HRS | State1 | Sample1 |
+| AAAGATGGTTGGTTTG | HRS | State3 | Sample1 |
+| AAAGCAAAGTGGTAGC | HRS | State1 | Sample1 |
+| AAATGCCTCTCTGTCG | HRS | State4 | Sample1 |
+| AACGTTGGTAAGTTCC | HRS | State1 | Sample1 |
+| AACTGGTCAAACGTGG | HRS | State2 | Sample1 |
+| AACTGGTTCTGCTGTC | HRS | State1 | Sample1 |
 </details>
 
 ```bash
