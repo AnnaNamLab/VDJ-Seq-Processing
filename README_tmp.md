@@ -32,7 +32,7 @@ More details about the steps are provided in the workflow folder.
 The following packages are required to be installed prior to running the pipeline:
 1) TRUST4 (https://github.com/liulab-dfci/TRUST4) [1]
 2) igblast (https://ncbi.github.io/igblast/cook/How-to-set-up.html) [2]
-3) IgPhyML (https://github.com/immcantation/igphyml) [3, 4]
+3) IgPhyML (https://igphyml.readthedocs.io/en/latest/install.html) [3, 4]
 4) R (4.4.2)
     - <span style="color:red;">Ape</span> ()
 
@@ -141,6 +141,10 @@ Rscript scripts/BCR/doublet_finding_BCR.R \
 ```
 
 
+### Detecting the dominant clone
+The most expanded clone for each chain is identified, and the its V(D)J is recorded. (`scripts/BCR/heatmap_before_VDJcorrection.R`)
+
+
 ### Refining the V/D/J assignments
 
 For improved V(D)J assignment accuracy, we refine existing assignments from `TRUST4` by incorporating results from an additional `Igblast` method.
@@ -173,19 +177,14 @@ Here is an example:
 ```bash
 ./igblast_preprocess.sh Sample1 IGL /path/to/trust4_output_dir/Sample1_T4_Output
 ```
-After running igblast, `refining_VDJ_BCR.R` is run:
 
-```bash
-Rscript scripts/BCR/refining_VDJ_BCR.R
-```
-
+Next, the V(D)J annotations are refined using the outputs of TRUST4 and Igblast with `refining_VDJ_BCR.R`
 
 
 ### Building the phylogenetic tree
 
-To generate the phylogenetic tree, IgPhyML package is used. To install it, please refere to: https://igphyml.readthedocs.io/en/latest/install.html
-The input of igphyml is generated from  running heatmap_after_VDJcorrection.R and  then IgPhyML_fasta_prepration.R. 
-After installation, copy you CDR3_preprocessed_MAFFT_aligned.fa to your working directory and run the below script:
+To generate the phylogenetic tree, the input of igphyml is generated from  running heatmap_after_VDJcorrection.R and  then IgPhyML_fasta_prepration.R. 
+Copy "CDR3_preprocessed_MAFFT_aligned.fa" to your working directory and run the below script:
 
 ```bash
 sbatch igphyml_run.sh Sample1
@@ -194,11 +193,11 @@ make sure that igphyml_run.sh is modifed based on the directory where igphyml is
 you can interactively run the IgPhyML if the number of CDR3 sequences is low. Here is an example:
 
 ```
-sample=HL1
-/athena/namlab/scratch/sam4032/CDR3_tree/igphyml/src/igphyml \
- -i /athena/namlab/scratch/sam4032/CDR3_tree/singleCDR3/$sample/sampled_unique_sequences_${sample}.fasta \
+sample=Sample1
+path/to/igphyml \
+ -i /path/to/sampled_unique_sequences_${sample}.fasta \
  -m GY \
- --run_id singleCDR3_$sample
+ --run_id singleCDR3_${sample}
 ```
 The igphyml tree downstream anlysis will be then performed by running igphyml_downStream.R. 
 
