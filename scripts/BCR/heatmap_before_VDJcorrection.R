@@ -17,10 +17,10 @@ library(phangorn)
 
 sample= "HL15"
 input_directory = paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample)
-metadata_file = "/Users/saramoein/Documents/new_run_HL_May2025/2025-07-03_CellMetadata_HL1-24incHL8R_RetainedCellsOnly_MainCellTypeAndSubtypeNames.csv"
+metadata_file = "metadata.cell.csv"
 trust4_cluster_clone = Sys.glob('*clone*.tsv')[1] 
-light_chain_cellStatus = Sys.glob(paste0('/Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGK_IGL.csv'))
-heavy_chain_cellStatus = Sys.glob(paste0('/Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGH.csv'))
+light_chain_cellStatus = Sys.glob(paste0('./doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGK_IGL.csv'))
+heavy_chain_cellStatus = Sys.glob(paste0('./doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGH.csv'))
 
 
 
