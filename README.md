@@ -33,13 +33,13 @@ The following packages are required to be installed prior to running the pipelin
 1) TRUST4 (https://github.com/liulab-dfci/TRUST4) [1]
 2) igblast (https://ncbi.github.io/igblast/cook/How-to-set-up.html) [2]
 3) IgPhyML (https://igphyml.readthedocs.io/en/latest/install.html) [3, 4]
-4) MAFFT (https://github.com/ GSLBiotech/mafft) 
+4) MAFFT (https://github.com/ GSLBiotech/mafft) [5]
 5) R (v4.4.2)
     - <span style="color:red;">ggtree</span>
     - <span style="color:red;">ape</span>
     - <span style="color:red;">phangorn</span>
     - <span style="color:red;">DECIPHER</span>
-    - <span style="color:red;">DECIPHER</span>
+    - <span style="color:red;">phytools</span>
     
 ## Pipeline
 
@@ -60,11 +60,9 @@ cd /path/to/trust4_output_dir/
 python trust-cluster.py /path/to/trust4_output_dir/cdr3.out /path/to/trust4_output_dir/cluster_clone.tsv
 ```
 
-The outcome file (cluster_clone.tsv) is used for more downstream analysis and generating the BCR phylogenetic tree.
+The outcome file (cluster_clone.tsv) is used for more downstream analysis and generating the BCR phylogenetic tree. In addition, the main cell type annotation file (cell_metadata.csv) is needed for rest of analysis.
 
-### Removing the Doublets using BCR sequences
 
-Doublets were identified based on the principle of allelic exclusion using the following command.
 > `cell_metadata.csv`: four column table with cell barcode ("Full.cell_id") and cell type ("MainCelltype"), sub-cell type ("SubtypeName) and patient ID ("Patient")
 Example `cell_metadata.csv`:
 <details>
@@ -136,6 +134,10 @@ Example `cell_metadata.csv`:
     </tbody>
   </table>
 </details>
+
+### Removing the Doublets using BCR sequences
+
+Doublets were identified based on the principle of allelic exclusion using the following command.
 
 ```bash
 Rscript scripts/BCR/doublet_finding_BCR.R \
@@ -223,7 +225,13 @@ Finally, the resulting trees can be visualized and annotated using `scripts/BCR/
 
 ## TCR Analysis
 
-For TCR: 
+TCR repertoire is generated from TCR single cell fastq files using TRUST4 as follows:
+```bash
+chmod +x run_trust4_slurm.sh
+sbatch run_trust4_slurm.sh <sample_name> <read1.fastq.gz> <read2.fastq.gz> <output_prefix>
+```
+TRUST4 generates multiple output files in `/path/to/trust4_output_TCR_dir/` including cdr3.out, which contains the CDR3 sequences.
+
 ```bash
 Rscript scripts/BCR/doublet_finding_TCR.R \
   --input /path/to/trust4_output_dir \
@@ -232,7 +240,7 @@ Rscript scripts/BCR/doublet_finding_TCR.R \
   --file /path/to/HL1_cdr3.out
 
 ```
-
+After defining the doublets, the TCR clone expansion is analyzed using scripts/TCR/TCR_expansion.R.
 
 
 ## References
