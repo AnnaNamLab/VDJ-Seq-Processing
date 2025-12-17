@@ -10,10 +10,10 @@ This repository contains code for:
 1. Generating BCR Repertoire using TRUST4
 1. Removing the Doublets using BCR sequences
 1. Detecting the dominant clone
-1. Refining the V/D/J assignments in Hodgkin and Reed-Sternberg (HRS) cells
+1. Refining the V/D/J assignments
 1. Building the phylogenetic tree
 
-The general scheme is illstrated below - More details about the steps are provided in the workflow folder.
+The general scheme is illustrated below - More details about the steps are provided in the workflow folder.
 
 <div align="left">
   <img
@@ -63,17 +63,72 @@ Doublets were identified based on the principle of allelic exclusion using the f
 Example `cell_metadata.csv`:
 <details>
   <summary>See `cell_metadata.csv` example</summary>
-| Full.cell_id | MainCelltype | SubtypeName | Patient |
-|---|---|---|---|
-| AAACGGGCAAAGTGCG | HRS | State1 | Sample1 |
-| AAACGGGCAGTCAGAG | HRS | State2 | Sample1 |
-| AAACGGGGTATCAGTC | HRS | State1 | Sample1 |
-| AAAGATGGTTGGTTTG | HRS | State3 | Sample1 |
-| AAAGCAAAGTGGTAGC | HRS | State1 | Sample1 |
-| AAATGCCTCTCTGTCG | HRS | State4 | Sample1 |
-| AACGTTGGTAAGTTCC | HRS | State1 | Sample1 |
-| AACTGGTCAAACGTGG | HRS | State2 | Sample1 |
-| AACTGGTTCTGCTGTC | HRS | State1 | Sample1 |
+  <table>
+    <thead>
+      <tr>
+        <th>Full.cell_id</th>
+        <th>MainCelltype</th>
+        <th>SubtypeName</th>
+        <th>Patient</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>AAACGGGCAAAGTGCG</td>
+        <td>HRS</td>
+        <td>State1</td>
+        <td>Sample1</td>
+      </tr>
+      <tr>
+        <td>AAACGGGCAGTCAGAG</td>
+        <td>HRS</td>
+        <td>State2</td>
+        <td>Sample1</td>
+      </tr>
+      <tr>
+        <td>AAACGGGGTATCAGTC</td>
+        <td>HRS</td>
+        <td>State1</td>
+        <td>Sample1</td>
+      </tr>
+      <tr>
+        <td>AAAGATGGTTGGTTTG</td>
+        <td>HRS</td>
+        <td>State3</td>
+        <td>Sample1</td>
+      </tr>
+      <tr>
+        <td>AAAGCAAAGTGGTAGC</td>
+        <td>HRS</td>
+        <td>State1</td>
+        <td>Sample1</td>
+      </tr>
+      <tr>
+        <td>AAATGCCTCTCTGTCG</td>
+        <td>HRS</td>
+        <td>State4</td>
+        <td>Sample1</td>
+      </tr>
+      <tr>
+        <td>AACGTTGGTAAGTTCC</td>
+        <td>HRS</td>
+        <td>State1</td>
+        <td>Sample1</td>
+      </tr>
+      <tr>
+        <td>AACTGGTCAAACGTGG</td>
+        <td>HRS</td>
+        <td>State2</td>
+        <td>Sample1</td>
+      </tr>
+      <tr>
+        <td>AACTGGTTCTGCTGTC</td>
+        <td>HRS</td>
+        <td>State1</td>
+        <td>Sample1</td>
+      </tr>
+    </tbody>
+  </table>
 </details>
 
 ```bash
@@ -87,7 +142,7 @@ Rscript scripts/BCR/doublet_finding_BCR.R \
 
 This command runs the BCR doublet detection using TRUST4 output and associated metadata.
 
-### Refining the V/D/J assignments in Hodgkin and Reed-Sternberg (HRS) cells
+### Refining the V/D/J assignments
 
 This step uses the igblast tool and fasta file as extra resources to survive the HRS cells with different V,D,J from the dominant clone.
 To run this part, a list of HRS contigs are required, based on this pattern "contigs_${sample}_${chain}.txt".
