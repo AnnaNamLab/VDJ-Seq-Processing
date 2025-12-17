@@ -185,6 +185,11 @@ Next, the V(D)J annotations are refined using the outputs of TRUST4 and Igblast 
 
 The above step results in `<TABLE_FILE_NAME>`. This table is cleaned to keep relevant columns and to re-evaluate the expanded clones after V(D)J refinement, using the following script `scripts/BCR/heatmap_after_VDJcorrection.R`
 
+```bash
+Rscript scripts/BCR/heatmap_after_VDJcorrection.R
+```
+The resulting table (<OUTPUT_FILENAME>) contains only the complete CDR3 sequences and the corresponding refined V(D)J assignments.
+
 
 ### Building the phylogenetic tree
 
