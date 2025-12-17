@@ -140,15 +140,15 @@ Rscript scripts/BCR/doublet_finding_BCR.R \
 
 ```
 
-This command runs the BCR doublet detection using TRUST4 output and associated metadata.
 
 ### Refining the V/D/J assignments
 
-This step uses the igblast tool and fasta file as extra resources to survive the HRS cells with different V,D,J from the dominant clone.
-To run this part, a list of HRS contigs are required, based on this pattern "contigs_${sample}_${chain}.txt".
+For improved V(D)J assignment accuracy, we refine existing assignments from `TRUST4` by incorporating results from an additional `Igblast` method.
 
-For example, we subset the HRS contigs in "contigs_HL1_IGL.txt". IGL is  the clonal chain.
+This step uses fasta file (`annot.fa`) from TRUST4 which contains multiple V(D)J assignments, a list of contig IDs from cells of interest ("contigs_${sample}_${chain}.txt")
 
+<details>
+  <summary>Example contig ID list: "contigs_Sample1_IGL.txt"</summary>
 ```bash
 AAACGGGCAAAGTGCG_21556
 AAACGGGCAGTCAGAG_21980
@@ -159,8 +159,9 @@ AAATGCCTCTCTGTCG_21695
 AACGTTGGTAAGTTCC_21525
 AACTGGTCAAACGTGG_22089
 AACTGGTTCTGCTGTC_21948
-
 ```
+</details>
+
 This file should be saved to the directory that *annot.fa (output from trust4) is located.
 Then we should run submit_igblast.sh:
 
