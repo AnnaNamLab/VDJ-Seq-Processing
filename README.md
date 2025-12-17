@@ -236,10 +236,10 @@ TRUST4 generates multiple output files in `/path/to/trust4_output_TCR_dir/` incl
 
 ```bash
 Rscript scripts/TCR/doublet_finding_TCR.R \
-  --input /path/to/trust4_output_dir \
+  --input /path/to/trust4_output_TCR_dir \
   --metadata /path/to/cell_metadata.csv \
-  --sample HL1 \
-  --file /path/to/HL1_cdr3.out
+  --sample sample1 \
+  --file /path/to/cdr3.out
 
 ```
 After defining the doublets, the TCR clone expansion is analyzed using scripts/TCR/TCR_expansion.R.
