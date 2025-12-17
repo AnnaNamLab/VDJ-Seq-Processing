@@ -145,24 +145,23 @@ Rscript scripts/BCR/doublet_finding_BCR.R \
 
 For improved V(D)J assignment accuracy, we refine existing assignments from `TRUST4` by incorporating results from an additional `Igblast` method.
 
-This step uses fasta file (`annot.fa`) from TRUST4 which contains multiple V(D)J assignments, a list of contig IDs from cells of interest ("contigs_${sample}_${chain}.txt")
+This step uses fasta file (`annot.fa`) from TRUST4 which contains multiple V(D)J assignments, and a list of contig IDs from cells of interest ("contigs_${sample}_${chain}.txt") from `/path/to/trust4_output_dir`.
 
 <details>
   <summary>Example contig ID list: "contigs_Sample1_IGL.txt"</summary>
-```bash
-AAACGGGCAAAGTGCG_21556
-AAACGGGCAGTCAGAG_21980
-AAACGGGGTATCAGTC_21656
-AAAGATGGTTGGTTTG_22094
-AAAGCAAAGTGGTAGC_21648
-AAATGCCTCTCTGTCG_21695
-AACGTTGGTAAGTTCC_21525
-AACTGGTCAAACGTGG_22089
-AACTGGTTCTGCTGTC_21948
+```
+AAACGGGCAAAGTGCG_21556  
+AAACGGGCAGTCAGAG_21980  
+AAACGGGGTATCAGTC_21656  
+AAAGATGGTTGGTTTG_22094  
+AAAGCAAAGTGGTAGC_21648  
+AAATGCCTCTCTGTCG_21695  
+AACGTTGGTAAGTTCC_21525  
+AACTGGTCAAACGTGG_22089  
+AACTGGTTCTGCTGTC_21948  
 ```
 </details>
 
-This file should be saved to the directory that *annot.fa (output from trust4) is located.
 Then we should run submit_igblast.sh:
 
 ```bash
@@ -172,7 +171,7 @@ chmod +x igblast_preprocess.sh
 
 Here is an example: 
 ```bash
-./igblast_preprocess.sh HL1 IGL /athena/namlab/scratch/sam4032/HL1_s1s2/HL1_T4_Output_2024_01_04
+./igblast_preprocess.sh Sample1 IGL /path/to/trust4_output_dir/Sample1_T4_Output
 ```
 After running igblast, refining_VDJ_BCR.R is run. 
 
@@ -185,7 +184,7 @@ The input of igphyml is generated from  running heatmap_after_VDJcorrection.R an
 After installation, copy you CDR3_preprocessed_MAFFT_aligned.fa to your working directory and run the below script:
 
 ```bash
-sbatch igphyml_run.sh HL1
+sbatch igphyml_run.sh Sample1
 ```
 make sure that igphyml_run.sh is modifed based on the directory where igphyml is installed.
 you can interactively run the IgPhyML if the number of CDR3 sequences is low. Here is an example:
