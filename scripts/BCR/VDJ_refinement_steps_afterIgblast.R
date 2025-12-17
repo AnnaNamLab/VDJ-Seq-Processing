@@ -1,12 +1,6 @@
-### this code has 2 main steps for fixing V/D/J assignment obtained from TRUST4. Step 1 is based on igblast, and step2 is based on fasta file to find any contig that has similar V/D/J as 
-### dominant V/D/J (clonal V/D/J).
+#This is based on fasta file and igblast output file to find any contig that has similar V/D/J as dominant V/D/J (clonal V/D/J).
 
 library(dplyr)
-#########STEP1#######
-
-### step1 receives all the HRS_contigs of a sample and generates the igblast VDJs from trust4 fasta file and then merges the generated igblast V/D/Js as new columns 
-### to the trust4_clustered file. Then Any of the contigs that their igblast V/D/J is the same as dominant VDJ, then it is replaced. Else, the trust4 V/D/J is returened.
-### input dominant V_D_J ; this is obtained from the heatmap in previous steps
 
 sample="HL1"
 setwd(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample))
@@ -61,37 +55,6 @@ HRS_FILTERED_out_clone_dominantChain= HRS_FILTERED_out_clone_dominantChain[HRS_F
 
 ### HRS contigs are used for the next step for igblasting
 write.table(HRS_FILTERED_out_clone_dominantChain$sequence_id,paste0('contigs_',sample,'_',chain,'.txt'),row.names= FALSE, col.names= FALSE, quote= FALSE)
-
-
-### Bash script running on HPC
-### filtering the airr.tsv file (from TRUST4) based on cells_HRS. That gives the contigs of HRS cells.
-### Then the contigs are extracted in the text file. For example, for HL10, we will have contigs_HL10.txt
-
-
-#To fix the VDJs first we add a new column to data based on igblast tool. To find the clone VDJ, for those non-clonal HRS cell's contigs, we try to ge
-# #!/bin/bash
-# 
-# #SBATCH --partition=scu-cpu   # cluster-specific
-# #SBATCH --nodes=1
-# #SBATCH --ntasks=1
-# #SBATCH --job-name=igblast
-# #SBATCH --time=48:00:00   # HH/MM/SS
-# #SBATCH --mem=512G   # memory requested, units available: K,M,G,T
-# 
-# fastafile=./test/out_FR2_annot.fa
-## we also convertthe fasta file to single line fatsa for using in the second step
-# awk '/^>/&&NR>1{print "";}{printf "%s",/^>/ ? $0" " : $0}' ./test/out_FR2_annot.fa > ./test/singleline_HL10_s1s2_annot.fa
-# 
-# cd /athena/namlab/scratch/sam4032/immcantation-master/scripts/ncbi-igblast-1.17.0/bin
-# 
-# sed '/^>/ s/ .*//' ./test/out_FR2_annot.fa > ./test/fix_my_sample.fa ### this line fixes the fasta file headers and only keeps the contig id
-# grep -w -A 1 -f  ./test/contigs_HL10.txt ./test/fix_my_sample.fa --no-group-separator > ./test/sub_fix_my_sample.fa.  ### this line subset the fasta file to keep only HRS_contigs
-# 
-# igblastn -germline_db_V /home/sam4032/share/igblast/database/imgt_human_IGLV_clean.fasta -num_alignments_V 3
-#-germline_db_D /home/sam4032/share/igblast/database/empty_IGLD -num_alignments_D 3 -germline_db_J /home/sam4032/share/igblast/database/imgt_human_IGLJ_clean.fasta
-#-num_alignments_J 3 -query sub_fix_my_sample_${chain}.fa
-# -organism human -outfmt 19 -out ${sample}_igblast_output2_${chain}_correrct.txt
-# 
 
 
 
