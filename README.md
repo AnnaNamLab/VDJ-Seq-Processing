@@ -35,11 +35,11 @@ The following packages are required to be installed prior to running the pipelin
 3) IgPhyML (https://igphyml.readthedocs.io/en/latest/install.html) [3, 4]
 4) MAFFT (https://github.com/ GSLBiotech/mafft) [5]
 5) R (v4.4.2)
-    - <span style="color:red;">ggtree</span>
-    - <span style="color:red;">ape</span>
-    - <span style="color:red;">phangorn</span>
-    - <span style="color:red;">DECIPHER</span>
-    - <span style="color:red;">phytools</span>
+    - <span style="color:red;">ggtree (v3.14.0)</span>
+    - <span style="color:red;">ape(v5.8-1)</span>
+    - <span style="color:red;">phangorn(v2.12.1)</span>
+    - <span style="color:red;">DECIPHER(v3.2.0)</span>
+    - <span style="color:red;">phytools(v2.5.2)</span>
     
 ## Pipeline
 
@@ -154,7 +154,7 @@ The most expanded clone for each chain is identified, and the its V(D)J is recor
 ```bash
 Rscript scripts/BCR/expandedClone_identification.R
 ```
-
+Parameters of this code should be modified based on the available data.
 
 ### Refining the V/D/J assignments
 
@@ -195,7 +195,7 @@ Next, the V(D)J annotations are refined using the outputs of TRUST4 and Igblast 
 The above step results in `sample1_igblast_output2_dominantChain_correrct.csv`. This table is cleaned to keep relevant columns and to re-evaluate the expanded clones after V(D)J refinement, using the following script `scripts/BCR/expandedClone_refinment.R`. Parameters of this code should be modified based on the available data.
 
 ```bash
-Rscript scripts/BCR/heatmap_after_VDJcorrection.R
+Rscript scripts/BCR/expandedClone_refinment.R
 ```
 The resulting table <span style="color:red">no_doublet_VDJfixed_clean_BCR_data_HRS_Bcells_DominantChain.csv</span> contains only the no doublets, complete CDR3 sequences and the corresponding refined V(D)J assignments.
 
@@ -226,14 +226,10 @@ Finally, the resulting trees can be visualized and annotated using `scripts/BCR/
 
 ## TCR Analysis
 
-TCR repertoire is generated from TCR single cell fastq files using TRUST4 as follows:
-```bash
-chmod +x run_trust4_slurm.sh
-sbatch run_trust4_slurm.sh <sample_name> <read1.fastq.gz> <read2.fastq.gz> <output_prefix>
-```
-TRUST4 generates multiple output files in `/path/to/trust4_output_TCR_dir/` including cdr3.out, which contains the CDR3 sequences.
+TRUST4 pipeline described above for BCR data can be applied to single cell TCR fastq files to generate the TCR repertoire.
 
-
+The TRUST4 outputs go to `/path/to/trust4_output_TCR_dir/` including cdr3.out, which contains the CDR3 sequences. Doublets can be identified using the following command:
+ 
 ```bash
 Rscript scripts/TCR/doublet_finding_TCR.R \
   --input /path/to/trust4_output_TCR_dir \
@@ -242,7 +238,7 @@ Rscript scripts/TCR/doublet_finding_TCR.R \
   --file /path/to/cdr3.out
 
 ```
-After defining the doublets, the TCR clone expansion is analyzed using scripts/TCR/TCR_expansion.R.
+After defining the doublets, the TCR clone expansion is assessed using scripts/TCR/TCR_expansion.R.
 
 
 ## References
