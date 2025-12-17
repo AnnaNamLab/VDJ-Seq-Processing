@@ -142,7 +142,10 @@ Rscript scripts/BCR/doublet_finding_BCR.R \
 
 
 ### Detecting the dominant clone
-The most expanded clone for each chain is identified, and the its V(D)J is recorded. (`scripts/BCR/heatmap_before_VDJcorrection.R`)
+The most expanded clone for each chain is identified, and the its V(D)J is recorded:
+```bash
+Rscript scripts/BCR/heatmap_before_VDJcorrection.R
+```
 
 
 ### Refining the V/D/J assignments
