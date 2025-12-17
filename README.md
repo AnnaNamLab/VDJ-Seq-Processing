@@ -7,8 +7,8 @@ This repository contains code for:
 
 ### BCR processing steps:
 
-1. Generating BCR Repertoire using TRUST4
-1. Removing the Doublets using BCR sequences
+1. Generating BCR repertoire using TRUST4
+1. Removing the doublets using BCR sequences
 1. Detecting the dominant clone
 1. Refining the V/D/J assignments
 1. Building the phylogenetic tree
@@ -43,7 +43,7 @@ The following packages are required to be installed prior to running the pipelin
     
 ## Pipeline
 
-### Generating BCR Repertoire using TRUST4
+### Generating BCR repertoire using TRUST4
 
 BCR repertoire is generated from BCR single cell fastq files using TRUST4 as follows:
 ```bash
@@ -135,7 +135,7 @@ Example `cell_metadata.csv`:
   </table>
 </details>
 
-### Removing the Doublets using BCR sequences
+### Removing the doublets using BCR sequences
 
 Doublets were identified based on the principle of allelic exclusion using the following command.
 
@@ -160,7 +160,7 @@ Rscript scripts/BCR/expandedClone_identification.R
 
 For improved V(D)J assignment accuracy, we refine existing assignments from `TRUST4` by incorporating results from an additional `Igblast` method.
 
-This step uses fasta file (`annot.fa`) from TRUST4 which contains multiple V(D)J assignments, and a list of contig IDs from cells of interest ("contigs_${sample}_${chain}.txt") from `/path/to/trust4_output_dir`. The list of contigs is extracted from scripts/BCR/HRS_contigs_VDJ_refinement.R
+This step uses fasta file (`annot.fa`) from TRUST4 which contains multiple V(D)J assignments, and a list of contig IDs from cells of interest ("contigs_${sample}_${chain}.txt") from `/path/to/trust4_output_dir`. The list of contigs is extracted from scripts/BCR/HRS_contigs.R
 
 <details>
   <summary>Example contig ID list: "contigs_Sample1_IGL.txt"</summary>
@@ -178,7 +178,7 @@ This step uses fasta file (`annot.fa`) from TRUST4 which contains multiple V(D)J
   ```
 </details>
 
-First, we identify the V(D)J annotations using Igblast as follows:
+After copying the contigs_Sample1_IGL.txt to trust4_output_dir, we identify the V(D)J annotations of the detected contigs using Igblast as follows:
 
 ```bash
 chmod +x igblast_preprocess.sh
@@ -190,9 +190,9 @@ Here is an example:
 ./igblast_preprocess.sh Sample1 IGL /path/to/trust4_output_dir/Sample1_T4_Output
 ```
 
-Next, the V(D)J annotations are refined using the outputs of TRUST4 and Igblast with `VDJ_refinment_steps_afterIgblast.R`
+Next, the V(D)J annotations are refined using the outputs of TRUST4 and Igblast with `VDJ_refinement_steps_afterIgblast.R`
 
-The above step results in `sample1_igblast_output2_dominantChain_correrct.csv`. This table is cleaned to keep relevant columns and to re-evaluate the expanded clones after V(D)J refinement, using the following script `scripts/BCR/expandedClone_refinment.R`
+The above step results in `sample1_igblast_output2_dominantChain_correrct.csv`. This table is cleaned to keep relevant columns and to re-evaluate the expanded clones after V(D)J refinement, using the following script `scripts/BCR/expandedClone_refinment.R`. Parameters of this code should be modified based on the available data.
 
 ```bash
 Rscript scripts/BCR/heatmap_after_VDJcorrection.R
@@ -233,8 +233,9 @@ sbatch run_trust4_slurm.sh <sample_name> <read1.fastq.gz> <read2.fastq.gz> <outp
 ```
 TRUST4 generates multiple output files in `/path/to/trust4_output_TCR_dir/` including cdr3.out, which contains the CDR3 sequences.
 
+
 ```bash
-Rscript scripts/BCR/doublet_finding_TCR.R \
+Rscript scripts/TCR/doublet_finding_TCR.R \
   --input /path/to/trust4_output_dir \
   --metadata /path/to/cell_metadata.csv \
   --sample HL1 \
