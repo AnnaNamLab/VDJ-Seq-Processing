@@ -1,5 +1,6 @@
 
 # Single-Cell VDJ processing
+----------
 
 The B cell receptor (BCR) and T cell receptor (TCR) are antigen-recognition receptors of the adaptive immune system. BCRs recognize antigens directly through membrane-bound immunoglobulins, whereas TCRs recognize peptide antigens presented by major histocompatibility complex (MHC) molecules. Both receptors achieve extraordinary diversity through V(D)J recombination during lymphocyte development, enabling precise and robust immune responses.
 
@@ -28,6 +29,7 @@ More details about the steps are provided in the workflow folder.
 
 
 ## Requirements
+----------
 
 The following packages are required to be installed prior to running the pipeline:
 1) TRUST4 (https://github.com/liulab-dfci/TRUST4) [1]
@@ -37,6 +39,7 @@ The following packages are required to be installed prior to running the pipelin
 5) R (4.4.2)
     - <span style="color:red;">Ape</span> ()
 
+----------
 
 ### Generating BCR Repertoire using TRUST4
 
@@ -216,7 +219,7 @@ To generate the phylogenetic tree, the following steps are performed.
 Finally, the resulting trees can be visualized and annotated using `scripts/BCR/igphyml_downStream.R`. This code also allows to assess the timing based on branch length and the CDR3 divergence based on the Levenshtein distances of the aligned CDR3 sequences.
 
 
-References
+## References
 ----------
 
 1. Song L, Cohen D, Ouyang Z, Cao Y, Hu X, Liu XS. TRUST4: immune repertoire reconstruction from bulk and single-cell RNA-seq data. Nat Methods. 2021;18(6):627-630. doi:10.1038/s41592-021-01142-2.
