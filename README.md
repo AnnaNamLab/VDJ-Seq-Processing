@@ -196,7 +196,7 @@ The above step results in `<TABLE_FILE_NAME>`. This table is cleaned to keep rel
 ```bash
 Rscript scripts/BCR/heatmap_after_VDJcorrection.R
 ```
-The resulting table <span style="color:red">(<OUTPUT_FILENAME>)</span> contains only the complete CDR3 sequences and the corresponding refined V(D)J assignments.
+The resulting table <span style="color:red">no_doublet_VDJfixed_clean_BCR_data_HRS_Bcells_DominantChain.csv</span> contains only the no doublets, complete CDR3 sequences and the corresponding refined V(D)J assignments.
 
 
 ### Building the phylogenetic tree
@@ -204,7 +204,7 @@ The resulting table <span style="color:red">(<OUTPUT_FILENAME>)</span> contains 
 To generate the phylogenetic tree, the following steps are performed.
 
 1. Data preparation (`IgPhyML_fasta_prepration.R`)
-    - Input: <TABLE_FILE_NAME>
+    - Input: no_doublet_VDJfixed_clean_BCR_data_HRS_Bcells_DominantChain.csv
     - Output: "CDR3_preprocessed_MAFFT_aligned.fa"
     ```bash
     sbatch igphyml_run.sh Sample1
