@@ -3,17 +3,17 @@
 
 The B cell receptor (BCR) and T cell receptor (TCR) are antigen-recognition receptors of the adaptive immune system. BCRs recognize antigens directly through membrane-bound immunoglobulins, whereas TCRs recognize peptide antigens presented by major histocompatibility complex (MHC) molecules. Both receptors achieve extraordinary diversity through V(D)J recombination during lymphocyte development, enabling precise and robust immune responses.
 
-This repository contains all code for BCR and TCR sequence generation, processing, quality control, and downstream analysis.
+This repository contains code for:
 
 ### BCR processing steps:
 
 1. Generating BCR Repertoire using TRUST4
 1. Removing the Doublets using BCR sequences
 1. Detecting the dominant clone
-1. Correcting the V/D/J assignments errors in Hodgkin and Reed-Sternberg (HRS) cells
+1. Refining the V/D/J assignments in Hodgkin and Reed-Sternberg (HRS) cells
 1. Building the phylogenetic tree
 
-The general scheme is ullstrated below - More details about the steps are provided in the workflow folder.
+The general scheme is illstrated below - More details about the steps are provided in the workflow folder.
 
 <div align="left">
   <img
@@ -34,7 +34,7 @@ The following packages are required to be installed prior to running the pipelin
 2) igblast (https://ncbi.github.io/igblast/cook/How-to-set-up.html) [2]
 3) IgPhyML (https://github.com/immcantation/igphyml) [3, 4]
 4) R (4.4.2)
-    - <span style="color:red;">IgPhyML</span> ()
+    - <span style="color:red;">Ape</span> ()
 
 
 ### Generating BCR Repertoire using TRUST4
@@ -62,18 +62,18 @@ Doublets were identified based on the principle of allelic exclusion using the f
 > `cell_metadata.csv`: four column table with cell barcode ("Full.cell_id") and cell type ("MainCelltype"), sub-cell type ("SubtypeName) and patient ID ("Patient")
 Example `cell_metadata.csv`:
 <details>
-  <summary>Click to expand example</summary>
+  <summary>See `cell_metadata.csv` example</summary>
   ```bash
   Full.cell_id,MainCelltype,SubtypeName,Patient
-  AAACGGGCAAAGTGCG_21556,B cells,Naive B cells,HL1
-  AAACGGGCAGTCAGAG_21980,B cells,Naive B cells,HL1
-  AAACGGGGTATCAGTC_21656,B cells,Naive B cells,HL1
-  AAAGATGGTTGGTTTG_22094,B cells,Naive B cells,HL1
-  AAAGCAAAGTGGTAGC_21648,B cells,Naive B cells,HL1
-  AAATGCCTCTCTGTCG_21695,B cells,Naive B cells,HL1
-  AACGTTGGTAAGTTCC_21525,B cells,Naive B cells,HL1
-  AACTGGTCAAACGTGG_22089,B cells,Naive B cells,HL1
-  AACTGGTTCTGCTGTC_21948,B cells,Naive B cells,HL1
+  AAACGGGCAAAGTGCG,HRS,State1,Sample1
+  AAACGGGCAGTCAGAG,HRS,State2,Sample1
+  AAACGGGGTATCAGTC,HRS,State1,Sample1
+  AAAGATGGTTGGTTTG,HRS,State3,Sample1
+  AAAGCAAAGTGGTAGC,HRS,State1,Sample1
+  AAATGCCTCTCTGTCG,HRS,State4,Sample1
+  AACGTTGGTAAGTTCC,HRS,State1,Sample1
+  AACTGGTCAAACGTGG,HRS,State2,Sample1
+  AACTGGTTCTGCTGTC,HRS,State1,Sample1
   ```
 </details>
 
@@ -81,24 +81,14 @@ Example `cell_metadata.csv`:
 Rscript scripts/BCR/doublet_finding_BCR.R \
   --input /path/to/trust4_output_dir \
   --metadata /path/to/cell_metadata.csv \
-  --sample HL1 \
-  --file /path/to/HL1_cdr3.out
+  --sample Sample1 \
+  --file /path/to/cdr3.out
 
 ```
 
 This command runs the BCR doublet detection using TRUST4 output and associated metadata.
 
-For TCR: 
-```bash
-Rscript scripts/BCR/doublet_finding_TCR.R \
-  --input /path/to/trust4_output_dir \
-  --metadata /path/to/cell_metadata.csv \
-  --sample HL1 \
-  --file /path/to/HL1_cdr3.out
-
-```
-
-### Correcting the V/D/J assignments errors in Hodgkin and Reed-Sternberg (HRS) cells
+### Refining the V/D/J assignments in Hodgkin and Reed-Sternberg (HRS) cells
 
 This step uses the igblast tool and fasta file as extra resources to survive the HRS cells with different V,D,J from the dominant clone.
 To run this part, a list of HRS contigs are required, based on this pattern "contigs_${sample}_${chain}.txt".
@@ -165,4 +155,16 @@ References
 
 4. Hoehn KB, Vander Heiden JA, Zhou JQ, Lunter G, Pybus OG, Kleinstein SH. Repertoire-wide phylogenetic models of B cell molecular evolution reveal evolutionary signatures of aging and vaccination. bioRxiv. 2019. https://doi.org/10.1101/558825
 EOF
+
+
+
+For TCR: 
+```bash
+Rscript scripts/BCR/doublet_finding_TCR.R \
+  --input /path/to/trust4_output_dir \
+  --metadata /path/to/cell_metadata.csv \
+  --sample HL1 \
+  --file /path/to/HL1_cdr3.out
+
+```
 
