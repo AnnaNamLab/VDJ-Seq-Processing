@@ -119,7 +119,7 @@ column_ha = HeatmapAnnotation(cell_status = new_data$MainCelltype, col= list(cel
 row_ha = rowAnnotation(cell_status= new_data$MainCelltype, col= list(cell_status=c("HRS"="red","Bcells"= "green")))
 
 
-pdf(paste0(sample,'_BCR_CLONE_heatmap_lv_distance_CDR3_',DominantChain,'_afterVJcorrection_dend_for_paper1.pdf'), width=13, height=13)
+pdf(paste0(sample,'_BCR_CLONE_heatmap_distance_CDR3_',DominantChain,'_afterVJcorrection.pdf'), width=13, height=13)
 print(Heatmap(dist1,col= col_runif,top_annotation = column_ha, right_annotation = row_ha,show_column_names = FALSE,show_row_names = FALSE,cluster_columns=TRUE,show_row_dend = TRUE, raster_resize_mat = TRUE))
 dev.off() 
 
