@@ -33,11 +33,14 @@ The following packages are required to be installed prior to running the pipelin
 1) TRUST4 (https://github.com/liulab-dfci/TRUST4) [1]
 2) igblast (https://ncbi.github.io/igblast/cook/How-to-set-up.html) [2]
 3) IgPhyML (https://igphyml.readthedocs.io/en/latest/install.html) [3, 4]
-4) MAFFT
+4) MAFFT (https://github.com/ GSLBiotech/mafft) 
 5) R (v4.4.2)
-    - <span style="color:red;">Ape</span> ()
-
-
+    - <span style="color:red;">ggtree</span>
+    - <span style="color:red;">ape</span>
+    - <span style="color:red;">phangorn</span>
+    - <span style="color:red;">DECIPHER</span>
+    - <span style="color:red;">DECIPHER</span>
+    
 ## Pipeline
 
 ### Generating BCR Repertoire using TRUST4
@@ -242,6 +245,7 @@ Rscript scripts/BCR/doublet_finding_TCR.R \
 3. Hoehn KB, Lunter G, Pybus OG. A Phylogenetic Codon Substitution Model for Antibody Lineages. Genetics. 2017;206(1):417–427. https://doi.org/10.1534/genetics.116.196303
 
 4. Hoehn KB, Vander Heiden JA, Zhou JQ, Lunter G, Pybus OG, Kleinstein SH. Repertoire-wide phylogenetic models of B cell molecular evolution reveal evolutionary signatures of aging and vaccination. bioRxiv. 2019. https://doi.org/10.1101/558825
+5. Katoh K, Misawa K, Kuma K, Miyata T. MAFFT: a novel method for rapid multiple sequence alignment based on fast Fourier transform. Nucleic Acids Res. 2002 Jul 15;30(14):3059-66. doi: 10.1093/nar/gkf436. PMID: 12136088; PMCID: PMC135756.
 EOF
 
 
