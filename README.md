@@ -1,7 +1,6 @@
 
 # Single-Cell VDJ processing
 ----------
-
 The B cell receptor (BCR) and T cell receptor (TCR) are antigen-recognition receptors of the adaptive immune system. BCRs recognize antigens directly through membrane-bound immunoglobulins, whereas TCRs recognize peptide antigens presented by major histocompatibility complex (MHC) molecules. Both receptors achieve extraordinary diversity through V(D)J recombination during lymphocyte development, enabling precise and robust immune responses.
 
 This repository contains code for:
@@ -30,7 +29,6 @@ More details about the steps are provided in the workflow folder.
 
 ## Requirements
 ----------
-
 The following packages are required to be installed prior to running the pipeline:
 1) TRUST4 (https://github.com/liulab-dfci/TRUST4) [1]
 2) igblast (https://ncbi.github.io/igblast/cook/How-to-set-up.html) [2]
@@ -39,8 +37,9 @@ The following packages are required to be installed prior to running the pipelin
 5) R (4.4.2)
     - <span style="color:red;">Ape</span> ()
 
-----------
 
+## Pipeline
+----------
 ### Generating BCR Repertoire using TRUST4
 
 BCR repertoire is generated from BCR single cell fastq files using TRUST4 as follows:
