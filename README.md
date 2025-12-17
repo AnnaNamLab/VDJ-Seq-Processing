@@ -152,7 +152,7 @@ Rscript scripts/BCR/doublet_finding_BCR.R \
 ### Detecting the dominant clone
 The most expanded clone for each chain is identified, and the its V(D)J is recorded:
 ```bash
-Rscript scripts/BCR/heatmap_before_VDJcorrection.R
+Rscript scripts/BCR/expandedClone_identification.R
 ```
 
 
@@ -160,7 +160,7 @@ Rscript scripts/BCR/heatmap_before_VDJcorrection.R
 
 For improved V(D)J assignment accuracy, we refine existing assignments from `TRUST4` by incorporating results from an additional `Igblast` method.
 
-This step uses fasta file (`annot.fa`) from TRUST4 which contains multiple V(D)J assignments, and a list of contig IDs from cells of interest ("contigs_${sample}_${chain}.txt") from `/path/to/trust4_output_dir`.
+This step uses fasta file (`annot.fa`) from TRUST4 which contains multiple V(D)J assignments, and a list of contig IDs from cells of interest ("contigs_${sample}_${chain}.txt") from `/path/to/trust4_output_dir`. The list of contigs is extracted from scripts/BCR/HRS_contigs_VDJ_refinement.R
 
 <details>
   <summary>Example contig ID list: "contigs_Sample1_IGL.txt"</summary>
@@ -190,9 +190,9 @@ Here is an example:
 ./igblast_preprocess.sh Sample1 IGL /path/to/trust4_output_dir/Sample1_T4_Output
 ```
 
-Next, the V(D)J annotations are refined using the outputs of TRUST4 and Igblast with `refining_VDJ_BCR.R`
+Next, the V(D)J annotations are refined using the outputs of TRUST4 and Igblast with `VDJ_refinment_steps_afterIgblast.R`
 
-The above step results in `<TABLE_FILE_NAME>`. This table is cleaned to keep relevant columns and to re-evaluate the expanded clones after V(D)J refinement, using the following script `scripts/BCR/heatmap_after_VDJcorrection.R`
+The above step results in `sample1_igblast_output2_dominantChain_correrct.csv`. This table is cleaned to keep relevant columns and to re-evaluate the expanded clones after V(D)J refinement, using the following script `scripts/BCR/expandedClone_refinment.R`
 
 ```bash
 Rscript scripts/BCR/heatmap_after_VDJcorrection.R
