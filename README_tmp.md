@@ -162,7 +162,7 @@ AACTGGTTCTGCTGTC_21948
 ```
 </details>
 
-Then we should run submit_igblast.sh:
+First, we identify the V(D)J annotations using Igblast as follows:
 
 ```bash
 chmod +x igblast_preprocess.sh
@@ -173,7 +173,11 @@ Here is an example:
 ```bash
 ./igblast_preprocess.sh Sample1 IGL /path/to/trust4_output_dir/Sample1_T4_Output
 ```
-After running igblast, refining_VDJ_BCR.R is run. 
+After running igblast, `refining_VDJ_BCR.R` is run:
+
+```bash
+Rscript scripts/BCR/refining_VDJ_BCR.R
+```
 
 
 
