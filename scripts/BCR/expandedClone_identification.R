@@ -15,16 +15,12 @@ library(phangorn)
 ### doublets and noise cells are removed. Only Bcells and HRS cells are included.
 ###setting the directory
 
-sample= "HL15"
+sample= "sample1"
 input_directory = paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample)
 metadata_file = "metadata.cell.csv"
 trust4_cluster_clone = Sys.glob('*clone*.tsv')[1] 
 light_chain_cellStatus = Sys.glob(paste0('./doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGK_IGL.csv'))
 heavy_chain_cellStatus = Sys.glob(paste0('./doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGH.csv'))
-
-
-
-
 
 # -----------------------
 # Set working directory
@@ -32,22 +28,19 @@ heavy_chain_cellStatus = Sys.glob(paste0('./doublets_BCR_thre07_ent08/',sample,'
 dir.create(input_directory, showWarnings = FALSE)
 setwd(input_directory)
 
-
-
 ### reading the cell types from GEX
 
 new_clusters= read.csv(metadata_file)
 new_clusters$cell_id1=sub("^.*_([A-Z]+)-.*$", "\\1", new_clusters$Full.cell_id)
 
 
-#### extracting the Bcells nad HRS from GEX data per sample
+### extracting the Bcells nad HRS from GEX data per sample
 sample_HRS_Bcells=new_clusters[new_clusters$Patient== sample & new_clusters$MainCelltype %in% c("HRS", "Bcells"),]
 sample_HRS=new_clusters[new_clusters$Patient== sample & new_clusters$MainCelltype %in% c("HRS"),]
 ### after running TRUST4 clustering, we pull from HPC the outcome 
 
 FILTERED_out_clone= read.table(trust4_cluster_clone,header= FALSE, sep='\t')
 colnames(FILTERED_out_clone)=c("consensus_id",	"index_within_consensus",	"V_gene",	"D_gene",	"J_gene",	"C_gene",	"CDR1",	"CDR2",	"CDR3",	"CDR3_score",	"read_fragment_count", "CDR3_germline_similarity", "full_length_assembly","contig_id","s" )
-
 
 
 ### from TRUST4 clustering we need to define the chain; V_gene is corresponded to V_gene
@@ -59,9 +52,8 @@ FILTERED_out_clone= FILTERED_out_clone[FILTERED_out_clone$cell_id1 %in% sample_H
 
 for (chain in c("IGL","IGK", "IGH")){
   sample_trust4_per_chain= FILTERED_out_clone[FILTERED_out_clone$chain==chain,]
-  
-  
-  #### we an have VJ assignment and also getting the MainCelltype status from GEX data 
+    
+  ### we an have VJ assignment and also getting the MainCelltype status from GEX data 
   if (chain=="IGL" | chain=="IGK"){
   
     pilot_cellStatus_file= read.csv(light_chain_cellStatus) 
@@ -97,22 +89,22 @@ for (chain in c("IGL","IGK", "IGH")){
   }
   
   
-  ## generating the disnatnce matrix
+  ### generating the disnatnce matrix
   data=sample_trust4_per_chain
   data=data.frame(data)
   data= data[order(data$VDJ, decreasing=TRUE),]
   dna_sample=char2dna(data$CDR3, simplify = FALSE) ## simplify= FALSE is the default
-  ##### to align the sequence
+  ### to align the sequence
   class(dna_sample)
   X11= align(dna_sample)
   rownames(X11)<- data$contig_id
   
-  ## we need to change the phylo class
+  ### we need to change the phylo class
   X111.phydat<-as.phyDat(X11)
   HLsample_X11= X11
   model_name="F81"
   
-  #genrating the distance matrix from aligned sequence
+  ### genrating the distance matrix from aligned sequence
   dist.X111.phydat = dist.dna(X11, model = "F81", variance = FALSE,
                               gamma = FALSE, pairwise.deletion = TRUE,
                               base.freq = NULL, as.matrix = TRUE)# , indel=TRUE
@@ -129,7 +121,7 @@ for (chain in c("IGL","IGK", "IGH")){
   }
   
  
-  #calculate Levenshtein distance between two strings
+  ### calculate Levenshtein distance between two strings
   
     dist1= as.matrix(dist.X111.phydat)
     row_dist1= rownames(dist1)
@@ -148,32 +140,4 @@ for (chain in c("IGL","IGK", "IGH")){
     dev.off()
   
 }
-
-### WE HAVE A VJ CORRECTION STEP....
-### THIS STEP ADDS A COLUMN NEW_VJ ASSIGNMENT
-
-
-join_IGL_IGK= full_join(data_IGL, data_IGK, by="cell_id1")
-
-df1 <- join_IGL_IGK %>% mutate(IGK_read = if_else(is.na(read_fragment_count.y), 0,read_fragment_count.y ))
-
-df1 <- df1 %>% mutate(IGL_read = if_else(is.na(read_fragment_count.x), 0,read_fragment_count.x ))
-pdf('join_IGL_IGK_read_HRScells_zoomed.pdf')
-lim= max(IQR(df1$IGL_read),IQR(df1$IGK_read))
-plot(df1$IGL_read,df1$IGK_read, xlim=c(0,500) , ylim=c(0,500))
-dev.off()
-pdf('join_IGL_IGK_read_HRScells.pdf')
-
-plot(df1$IGL_read,df1$IGK_read)
-dev.off()
-
-write.csv(table(data_IGK$MainCelltype),'data_IGK_HRS.csv')
-
-write.csv(table(data_IGL$MainCelltype),'data_IGL_HRS.csv')
-
-write.csv(table(data_IGH$MainCelltype),'data_IGH_HRS.csv')
-
-table(data_IGK$MainCelltype)
-table(data_IGL$MainCelltype)
-table(data_IGH$MainCelltype)
 
