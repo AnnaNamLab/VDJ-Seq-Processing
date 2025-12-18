@@ -395,44 +395,50 @@ ind= match(vdj_counts$cell_id1 , new_clusters$cell_id1)
 vdj_counts$subType = new_clusters$SubtypeName[ind]
 vdj_counts=vdj_counts[!is.na(vdj_counts$cell_id1),]
 
-#more refinement of the data
-#if the total read counts is more than 7, and entropy is high, and kurtosis is Inf/-Inf/NaN, then the cell is doublet
+# ------------------------------------------------------------
+# Refine ambiguous cells using entropy, read depth, and CDR3 similarity
+# ------------------------------------------------------------
+
+# Cells with high entropy + invalid kurtosis + sufficient reads → doublet
 vdj_counts$ReadStatus[which(((vdj_counts$ent>entropy_ther) & (vdj_counts$ent!= "NaN")) & (vdj_counts$kurtosis=="Inf" | vdj_counts$kurtosis=="-Inf" | vdj_counts$kurtosis=="NaN" ) & (vdj_counts$total_reads >7) & (!vdj_counts$cell_id1 %in% singlet_dominant[,1]))] = "doublet"
 
-#if the  the cell has only 1 contig, and 1 read, then kurtosis is NaN. That cell is called singlet.
+# if the  the cell has only 1 contig, and 1 read, then kurtosis is NaN. That cell is called singlet.
+# Single-contig single-read cells → singlet 
 vdj_counts$ReadStatus[which((vdj_counts$ent =="NaN")  & (vdj_counts$kurtosis=="NaN" ) & (vdj_counts$unique_vdjcall_count==1) )] = "singlet"
 
+# cells with insufficient number of reads (7 reads) need to be investigated. First based on entropy. If entropy is low, then the cell is singlet. If the 
+# entropy is high, then we use the similarity of CDR3s. If they are similar, then the cells is singlet. Eles the cell is Not-Assigned
 
+  
+vdj_counts$ReadStatus[which(((vdj_counts$ent>entropy_ther) & (vdj_counts$ent!= "NaN")) & (vdj_counts$kurtosis=="Inf" | vdj_counts$kurtosis=="-Inf" ) & (vdj_counts$total_reads<=7))] = "if_Not_Assigned"
+vdj_counts$ReadStatus[which(((vdj_counts$ent<=entropy_ther) & (vdj_counts$ent!= "NaN")) & (vdj_counts$kurtosis=="Inf"  | vdj_counts$kurtosis=="-Inf"  ) & (vdj_counts$total_reads<=7) )] = "singlet"
+ind = which(((vdj_counts$ent>entropy_ther) & (vdj_counts$ent!= "NaN")) & (vdj_counts$kurtosis=="Inf" | vdj_counts$kurtosis=="-Inf" ) & (vdj_counts$total_reads<=7))
+if_Not_Assigned= vdj_counts[ind,]
 
-  #cells with insufficient number of reads (7 reads) need to be investigated. First based on entropy. If entropy is low, then the cell is singlet. If the 
-  #entropy is high, then we use the similarity of CDR3s. If they are similar, then the cells is singlet. Eles the cell is Not-Assigned
-  vdj_counts$ReadStatus[which(((vdj_counts$ent>entropy_ther) & (vdj_counts$ent!= "NaN")) & (vdj_counts$kurtosis=="Inf" | vdj_counts$kurtosis=="-Inf" ) & (vdj_counts$total_reads<=7))] = "if_Not_Assigned"
-  vdj_counts$ReadStatus[which(((vdj_counts$ent<=entropy_ther) & (vdj_counts$ent!= "NaN")) & (vdj_counts$kurtosis=="Inf"  | vdj_counts$kurtosis=="-Inf"  ) & (vdj_counts$total_reads<=7) )] = "singlet"
-  ind = which(((vdj_counts$ent>entropy_ther) & (vdj_counts$ent!= "NaN")) & (vdj_counts$kurtosis=="Inf" | vdj_counts$kurtosis=="-Inf" ) & (vdj_counts$total_reads<=7))
-  if_Not_Assigned= vdj_counts[ind,]
-  sub_if_Not_Assigned = if_Not_Assigned[, c(1, (ncol(if_Not_Assigned)-4):(ncol(if_Not_Assigned)-2),ncol(if_Not_Assigned))]
-  data_sub_if_Not_Assigned <- rawCDR3_ALLcells[rawCDR3_ALLcells$cell_id1 %in% sub_if_Not_Assigned$cell_id1,]
-  data_sub_if_Not_Assigned_with_lv <- data_sub_if_Not_Assigned %>%
-    group_by(cell_id1) %>%
-    # Select top 2 contigs per cell by reads
-    slice_max(order_by = read_fragment_count, n = 2, with_ties = FALSE) %>%
-    # Compute normalized LV distance between CDR3s
-    mutate(CDR3_LV_dist_col = if(n() == 2) {
-      # Extract the two CDR3s
-      cdr3s <- CDR3
-      lv <- stringdist(cdr3s[1], cdr3s[2], method = "lv")
-      norm_lv <- lv / max(nchar(cdr3s[1]), nchar(cdr3s[2]))
-      rep(norm_lv, 2)
-    } else {
-      NA_real_
-    }) %>%
-    ungroup()
-  
-  singlet_selected= unique(data_sub_if_Not_Assigned_with_lv$cell_id1[which(data_sub_if_Not_Assigned_with_lv$CDR3_LV_dist_col<=0.2)])
-  ind = match(singlet_selected , vdj_counts$cell_id1)
-  vdj_counts$ReadStatus[ind]="singlet"
-  
-  vdj_counts$ReadStatus = ifelse(vdj_counts$ReadStatus=="if_Not_Assigned","Not_Assigned",vdj_counts$ReadStatus)
+sub_if_Not_Assigned = if_Not_Assigned[, c(1, (ncol(if_Not_Assigned)-4):(ncol(if_Not_Assigned)-2),ncol(if_Not_Assigned))]
+data_sub_if_Not_Assigned <- rawCDR3_ALLcells[rawCDR3_ALLcells$cell_id1 %in% sub_if_Not_Assigned$cell_id1,]
+
+data_sub_if_Not_Assigned_with_lv <- data_sub_if_Not_Assigned %>%
+  group_by(cell_id1) %>%
+  # Select top 2 contigs per cell by reads
+  slice_max(order_by = read_fragment_count, n = 2, with_ties = FALSE) %>%
+  # Compute normalized LV distance between CDR3s
+  mutate(CDR3_LV_dist_col = if(n() == 2) {
+    # Extract the two CDR3s
+    cdr3s <- CDR3
+    lv <- stringdist(cdr3s[1], cdr3s[2], method = "lv")
+    norm_lv <- lv / max(nchar(cdr3s[1]), nchar(cdr3s[2]))
+    rep(norm_lv, 2)
+  } else {
+    NA_real_
+  }) %>%
+  ungroup()
+
+singlet_selected= unique(data_sub_if_Not_Assigned_with_lv$cell_id1[which(data_sub_if_Not_Assigned_with_lv$CDR3_LV_dist_col<=0.2)])
+ind = match(singlet_selected , vdj_counts$cell_id1)
+vdj_counts$ReadStatus[ind]="singlet"
+
+vdj_counts$ReadStatus = ifelse(vdj_counts$ReadStatus=="if_Not_Assigned","Not_Assigned",vdj_counts$ReadStatus)
   
 # This step is to define the confidence level of the doublets
 doublet= vdj_counts$cell_id1[which(vdj_counts$ReadStatus=="doublet")]
@@ -527,10 +533,14 @@ df_with_lv <- df_doublets %>%
   }) %>%
   ungroup()
 
-
-#this step is for refinement of doublets based on the confidence level of VDJ assignment. if both are high-confidence, then the cell is doublet.
-#If not, then the similarity of CDR3 is used. If CDR3 are similar, then then cell is singlet. Else, the cell is doublet. 
-
+# ------------------------------------------------------------
+# Final refinement of doublets using confidence levels
+# ------------------------------------------------------------
+# High/high confidence → doublet
+# Mixed confidence → use CDR3 similarity
+# ------------------------------------------------------------
+# this step is for refinement of doublets based on the confidence level of VDJ assignment. if both are high-confidence, then the cell is doublet.
+# If not, then the similarity of CDR3 is used. If CDR3 are similar, then then cell is singlet. Else, the cell is doublet. 
 df_with_lv <- df_with_lv %>%
   group_by(cell_id1) %>%
   mutate(
