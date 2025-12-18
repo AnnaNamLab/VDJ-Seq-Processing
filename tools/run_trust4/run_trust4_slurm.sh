@@ -23,9 +23,9 @@ fi
 
 # ----------- TRUST4 paths -----------------
 TRUST4_EXEC="run-trust4"  # assumes it's in PATH or change to full path
-REF_FASTA="/path/to/hg38_bcrtcr.fa"
-VJ_REF="/path/to/human_IMGT+C.fa"
-BC_WHITELIST="/path/to/737K-august-2016.txt"
+REF_FASTA="/path/to/hg38_reference_VDJ_seq.fa"
+VJ_REF="/path/to/human_IMGT+C_reference_VDJ.fa"
+BC_WHITELIST="/path/to/10x_v3_barcode_whitelist_737K-august-2016.txt"
 
 # ----------- Create working directory -----
 cd /path/to/your/working/directory/$SAMPLE
