@@ -57,7 +57,7 @@ Incomplete CDR3 sequences are then filtered out using the following command:
 
 ```bash
 cd /path/to/trust4_output_dir/
-python trust-cluster.py /path/to/trust4_output_dir/cdr3.out /path/to/trust4_output_dir/cluster_clone.tsv
+python /path/to/trust-cluster.py /path/to/trust4_output_dir/cdr3.out /path/to/trust4_output_dir/cluster_clone.tsv
 ```
 
 The outcome file (cluster_clone.tsv) is used for more downstream analysis and generating the BCR phylogenetic tree. In addition, the main cell type annotation file (cell_metadata.csv) is needed for rest of analysis.
