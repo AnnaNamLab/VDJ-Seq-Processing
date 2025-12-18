@@ -24,7 +24,7 @@ singlet= unique(pilot_cellStatus_file$cell_id1[pilot_cellStatus_file$final_ReadS
 filtered_BCR_processed= filtered_BCR_processed[filtered_BCR_processed$cell_id1 %in% singlet,]
 
 ## reading the cell states
-new_clusters= read.csv('/Users/saramoein/Documents/new_run_HL_May2025/2025-07-03_CellMetadata_HL1-24incHL8R_RetainedCellsOnly_MainCellTypeAndSubtypeNames.csv')
+new_clusters= read.csv('cell_metadata.csv')
 new_clusters$cell_id1=sub("^.*_([A-Z]+)-.*$", "\\1", new_clusters$Full.cell_id)
 
 ## filtering the cells to keep HLsample HRS and Bcells after removing VDJ  
