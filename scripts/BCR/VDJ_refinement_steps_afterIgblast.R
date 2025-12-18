@@ -158,10 +158,10 @@ for (i in 1:nrow(merge_igblast_trust4)){
 # STEP 2: FASTA-level rescue of dominant V/D/J
 ################################################################################
 
-fasta_subset=read.table('singleline_TRUST_all_BCR_R2_annot.fa')
+# Read TRUST4 FASTA annotation table
+fasta_subset=read.table('singleline_TRUST_all_BCR_R2_annot.fa') ## convert annot.fa to single column data
 
-## extract one full sequence from the dominant VDJ and extract from igblast v1,v2,v3,j1,j2,j3,d1,d2,d3
-
+# Define top V/J candidates (from IgBlast)
 v1="IGLV4-69*01"
 v2="IGLV4-69*02"
 v3="IGLV4-60*033"
@@ -172,9 +172,11 @@ j1="IGLJ1*01"
 j2="IGLJ6*01"
 j3="IGLJ2*01"
 
+# Initialize FASTA-based correction columns
 merge_igblast_trust4$fix_trust4_fasta_v_call="NA"
 merge_igblast_trust4$fix_trust4_fasta_j_call="NA"
 merge_igblast_trust4$fix_trust4_fasta_d_call="NA"
+
 sel_dat =data.frame()
 
 if ((!is.na(v1) & !is.na(j1) & chain!="IGL") | (!is.na(v1) & !is.na(j1)  & !is.na(d1) & chain=="IGL")){ 
@@ -195,12 +197,14 @@ if ((!is.na(v1) & !is.na(j1) & chain!="IGL") | (!is.na(v1) & !is.na(j1)  & !is.n
     data= rbind(fasta_subset7,fasta_subset8,fasta_subset9)
   }
   sel_data= data
+  
+  # Extract contig IDs from FASTA headers
   sel_data$cell_id1= substr(sel_data$V1,2,17)
   sel_data$sequence_id= substr(sel_data$V1,2,50)
   
   sel_dat=distinct(sel_data)
   
-  # Here we replace dominant V/D/J for any of the contigs that are available in the fasta_subset with equal V/D/J as in dominant V/D/J
+  # Force dominant V/D/J for FASTA-matched contigs
   ind=match(merge_igblast_trust4$sequence_id , sel_data$sequence_id)
   
   merge_igblast_trust4$fix_trust4_fasta_v_call[which(ind>0)]= dominant_V
@@ -209,8 +213,9 @@ if ((!is.na(v1) & !is.na(j1) & chain!="IGL") | (!is.na(v1) & !is.na(j1)  & !is.n
   
 }
 
-#column "final_fixed_v_call" is the final V/D/J calls. We initiate with the final V/D/J calls from STEP1 and then continue final assignment
-## then selecting between fixed_trust4 and igblast_trust4 columns from step1
+################################################################################
+# STEP 3: Final V/D/J assignment
+################################################################################
 
 merge_igblast_trust4$final_fixed_v_call=merge_igblast_trust4$trust4_igblast_v_call
 merge_igblast_trust4$final_fixed_j_call=merge_igblast_trust4$trust4_igblast_j_call
@@ -227,17 +232,16 @@ for (i in 1:nrow(merge_igblast_trust4)){ #  & (merge_igblast_trust4$fix_trust4_f
   if ((merge_igblast_trust4$trust4_igblast_j_call[i]==dominant_J) | (merge_igblast_trust4$fix_trust4_fasta_j_call[i]==dominant_J) & (is.na(merge_igblast_trust4$fix_trust4_fasta_j_call[i])==FALSE)){
     merge_igblast_trust4$final_fixed_j_call[i]=dominant_J
     
-  }  
-  
-  
+  }    
 }
 
 
-## final file with fixed V/D/J in column "final_fixed_v/d/j_call"
-
-
+# Export corrected IgBlast + TRUST4 table
 write.csv(merge_igblast_trust4,paste0(sample,'_merge_igblast_trust4_corrected',chain,'.csv'))
 
+################################################################################
+# STEP 4: Apply final corrections back to TRUST4 contigs
+################################################################################
 
 FILTERED_out_clone_dominantChain$corrected_Vgene=FILTERED_out_clone_dominantChain$trust4_v_call
 FILTERED_out_clone_dominantChain$corrected_Dgene=FILTERED_out_clone_dominantChain$trust4_d_call
@@ -269,5 +273,8 @@ for (i in 1:nrow(FILTERED_out_clone_dominantChain)){
   }
 }
 
+# Export final corrected TRUST4 contigs
 write.csv(FILTERED_out_clone_dominantChain,paste0(sample,'_FILTERED_out_clone_dominantChain_',chain,'_corrected.csv'))
-
+################################################################################
+# End of script
+################################################################################
