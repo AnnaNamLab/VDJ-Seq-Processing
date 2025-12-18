@@ -7,11 +7,11 @@ This repository contains code for:
 
 ### BCR processing steps:
 
-1. Generating BCR repertoire using TRUST4
-1. Removing the doublets using BCR sequences
-1. Detecting the dominant clone
-1. Refining the V/D/J assignments
-1. Building the phylogenetic tree
+1. Generate BCR repertoire using TRUST4
+1. Remove doublets using BCR sequences
+1. Detecte dominant clone
+1. Refine V/D/J assignments
+1. Build phylogenetic tree
 
 The general scheme is illustrated below - More details about the steps are provided in the workflow folder.
 
@@ -43,7 +43,7 @@ The following packages are required to be installed prior to running the pipelin
     
 ## Pipeline
 
-### Generating BCR repertoire using TRUST4
+### Generate BCR repertoire using TRUST4
 
 BCR repertoire is generated from BCR single cell fastq files using TRUST4 as follows:
 ```bash
@@ -135,7 +135,7 @@ Example `cell_metadata.csv`:
   </table>
 </details>
 
-### Removing the doublets using BCR sequences
+### Remove doublets using BCR sequences
 
 Doublets were identified based on the principle of allelic exclusion using the following command.
 
@@ -149,14 +149,14 @@ Rscript scripts/BCR/doublet_finding_BCR.R \
 ```
 
 
-### Detecting the dominant clone
+### Detecte dominant clone
 The most expanded clone for each chain is identified, and the its V(D)J is recorded:
 ```bash
 Rscript scripts/BCR/expandedClone_identification.R
 ```
 Parameters of this code should be modified based on the available data.
 
-### Refining the V/D/J assignments
+### Refine V/D/J assignments
 
 For improved V(D)J assignment accuracy, we refine existing assignments from `TRUST4` by incorporating results from an additional `Igblast` method.
 
@@ -200,7 +200,7 @@ Rscript scripts/BCR/expandedClone_refinment.R
 The resulting table <span style="color:red">no_doublet_VDJfixed_clean_BCR_data_HRS_Bcells_DominantChain.csv</span> contains only the no doublets, complete CDR3 sequences and the corresponding refined V(D)J assignments.
 
 
-### Building the phylogenetic tree
+### Build phylogenetic tree
 
 To generate the phylogenetic tree, the following steps are performed.
 
