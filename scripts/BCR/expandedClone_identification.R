@@ -16,7 +16,7 @@ library(phangorn)
 ###setting the directory
 
 sample= "sample1"
-input_directory = paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample)
+input_directory = paste0(set_working_dir,'/',sample)
 metadata_file = "metadata.cell.csv"
 trust4_cluster_clone = Sys.glob('*clone*.tsv')[1] 
 light_chain_cellStatus = Sys.glob(paste0('./doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGK_IGL.csv'))
@@ -29,7 +29,6 @@ dir.create(input_directory, showWarnings = FALSE)
 setwd(input_directory)
 
 ### reading the cell types from GEX
-
 new_clusters= read.csv(metadata_file)
 new_clusters$cell_id1=sub("^.*_([A-Z]+)-.*$", "\\1", new_clusters$Full.cell_id)
 
@@ -37,8 +36,8 @@ new_clusters$cell_id1=sub("^.*_([A-Z]+)-.*$", "\\1", new_clusters$Full.cell_id)
 ### extracting the Bcells nad HRS from GEX data per sample
 sample_HRS_Bcells=new_clusters[new_clusters$Patient== sample & new_clusters$MainCelltype %in% c("HRS", "Bcells"),]
 sample_HRS=new_clusters[new_clusters$Patient== sample & new_clusters$MainCelltype %in% c("HRS"),]
-### after running TRUST4 clustering, we pull from HPC the outcome 
 
+### after running TRUST4 clustering, we pull from HPC the outcome 
 FILTERED_out_clone= read.table(trust4_cluster_clone,header= FALSE, sep='\t')
 colnames(FILTERED_out_clone)=c("consensus_id",	"index_within_consensus",	"V_gene",	"D_gene",	"J_gene",	"C_gene",	"CDR1",	"CDR2",	"CDR3",	"CDR3_score",	"read_fragment_count", "CDR3_germline_similarity", "full_length_assembly","contig_id","s" )
 
