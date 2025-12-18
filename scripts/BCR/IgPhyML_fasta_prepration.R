@@ -1,29 +1,34 @@
+
+# this step is for prepraring the required fasta file for running IgPhyML
+
 library(dplyr)
 library(ggplot2)
 library(Biostrings)
 
-sample="HL1"
-DominantChain="IGL"
-model_name="GY"
-setwd(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample))
-dir.create(paste0('igphyml_modelGY_NNNstopCodon_MAFFT_validCodon_semiRefined'))
-dir.create(paste0('./igphyml_modelGY_NNNstopCodon_MAFFT_validCodon_semiRefined/singleCDR3_final'))
+sample="sample1"     # sample name
+DominantChain="IGL"  # clone dominant chain
+model_name="GY"      # model used for generating tree in IgPhyMl
 
-filtered_BCR_processed = read.csv(paste0('no_doublet_VDJfixed_clean_BCR_data_HRS_Bcells_',DominantChain,'.csv'))
-filtered_BCR_processed= filtered_BCR_processed %>% group_by(cell_id1) %>% dplyr::slice(which.max(read_fragment_count))  
+setwd(paste0('set_working_directory/',sample))      
+dir.create(paste0('igphyml_modelGY_NNNstopCodon_MAFFT_validCodon_semiRefined')) # output fodler
+dir.create(paste0('./igphyml_modelGY_NNNstopCodon_MAFFT_validCodon_semiRefined/singleCDR3_final')) # outputfolder
+
+filtered_BCR_processed = read.csv(paste0('no_doublet_VDJfixed_clean_BCR_data_HRS_Bcells_',DominantChain,'.csv'))  # this is the output of expandedClone_refinement.R
+filtered_BCR_processed= filtered_BCR_processed %>% group_by(cell_id1) %>% dplyr::slice(which.max(read_fragment_count))  # selecting the contig with highest number of reads
 
 
-### read singlet
+## read singlet
 
 pilot_cellStatus_file= read.csv(Sys.glob(paste0('./doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGK_IGL.csv')))
 singlet= unique(pilot_cellStatus_file$cell_id1[pilot_cellStatus_file$final_ReadStatus=="singlet"])
 filtered_BCR_processed= filtered_BCR_processed[filtered_BCR_processed$cell_id1 %in% singlet,]
 
-####reading the cell states##
+## reading the cell states
 new_clusters= read.csv('/Users/saramoein/Documents/new_run_HL_May2025/2025-07-03_CellMetadata_HL1-24incHL8R_RetainedCellsOnly_MainCellTypeAndSubtypeNames.csv')
 new_clusters$cell_id1=sub("^.*_([A-Z]+)-.*$", "\\1", new_clusters$Full.cell_id)
 
-##### filtering the cells to keep HLsample HRS and Bcells after removing VDJ and ; 
+## filtering the cells to keep HLsample HRS and Bcells after removing VDJ  
+
 HLsample_HRS=new_clusters[new_clusters$Patient==sample & new_clusters$MainCelltype %in% c("HRS"),] 
 HLsample_Bcells=new_clusters[new_clusters$Patient==sample & new_clusters$MainCelltype %in% c("Bcells"),] 
 HLsample_Tcells=new_clusters[new_clusters$Patient==sample & new_clusters$MainCelltype %in% c("Tcells"),] 
@@ -32,7 +37,7 @@ write.table(paste0(HLsample_HRS$cell_id1,'-1'),'HLsample_HRS.txt',col.names=FALS
 write.table(paste0(HLsample_Bcells$cell_id1,'-1'),'HLsample_Bcells.txt',col.names=FALSE, row.names= FALSE, quote= FALSE)
 write.table(paste0(HLsample_Tcells$cell_id1,'-1'),'HLsample_Tcells.txt',col.names=FALSE, row.names= FALSE, quote= FALSE)
 
-###import the output file of data with fixed VDJ and removed doublets, call it filtered_BCR_processed # this file is free of doublets and fixed VDJ
+## import the output file of data with fixed VDJ and removed doublets, call it filtered_BCR_processed # this file is free of doublets and fixed VDJ
 
 filtered_BCR_processed=filtered_BCR_processed[filtered_BCR_processed$cell_id1 %in% HLsample_HRS$cell_id1,]# getting only HRS cells
 ind=match(filtered_BCR_processed$cell_id1,HLsample_HRS$cell_id1)# adding the cell state
@@ -40,18 +45,18 @@ filtered_BCR_processed$new_cell_state=HLsample_HRS$SubtypeName[ind]
 copy_filtered_BCR_processed=filtered_BCR_processed
 
 
-##### keeping only this group of HRS cells ("Cycling",   "Inflammatory",      "Metabolic",    "Bcell-HIGH", "Neural-Glial")
+## keeping only this group of HRS cells ("Cycling",   "Inflammatory",      "Metabolic",    "Bcell-HIGH", "Neural-Glial")
+
 filtered_BCR_processed=filtered_BCR_processed[filtered_BCR_processed$new_cell_state %in% c("MetaboHIGH", "Inflammatory", "Cycling","Neural" ,"BcellHIGH", "UPR_Secretory"),]
 filtered_BCR_processed$new_cell_state = gsub("UPR_Secretory","Secretory" , filtered_BCR_processed$new_cell_state)
 
 ## reading the airr.tsv file output of TRUST4 to extract the full sequence
+
 TRUST4_airr = read.table(Sys.glob('*_barcode_airr.tsv'), sep='\t', header=TRUE)
 filtered_BCR_processed_sequence_ind= match(filtered_BCR_processed$contig_id, TRUST4_airr$sequence_id)
 filtered_BCR_processed$sequence = TRUST4_airr$sequence[filtered_BCR_processed_sequence_ind]
 filtered_BCR_processed$productive = TRUST4_airr$productive[filtered_BCR_processed_sequence_ind]
 filtered_BCR_processed$junction_aa = TRUST4_airr$junction_aa[filtered_BCR_processed_sequence_ind]
-
-#filtered_BCR_processed = filtered_BCR_processed[which(filtered_BCR_processed$productive==TRUE & is.na(filtered_BCR_processed$CDR3)==FALSE), ]
 filtered_BCR_processed = filtered_BCR_processed[which(is.na(filtered_BCR_processed$CDR3)==FALSE), ]
 
 
@@ -145,7 +150,7 @@ write.table(filtered_BCR_processed[filtered_BCR_processed$contig_id %in% invalid
 filtered_BCR_processed = df_filtered
 
 
-
+## if there is stop codon in the seq replaced with NNN
 mask_stops_if_present <- function(seq) {
   # Convert to character to allow manipulation
   s <- as.character(seq)
@@ -234,16 +239,12 @@ split_list <- split(df, df$sequence)
 sampled_list <- lapply(split_list, function(x) {
   x[sample(nrow(x), 1), , drop = FALSE]
 })
-
-
-
 sampled_df <- do.call(rbind, sampled_list)
+
 
 # Convert back to DNAStringSet
 sampled_seqs <- DNAStringSet(sampled_df$sequence)
 names(sampled_seqs) <- sampled_df$header
-
-
 sampled_df <- do.call(rbind, sampled_list)
 
 
