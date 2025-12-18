@@ -1,64 +1,112 @@
-#This is based on fasta file and igblast output file to find any contig that has similar V/D/J as dominant V/D/J (clonal V/D/J).
+################################################################################
+# Purpose:
+# This script identifies and corrects BCR V/D/J gene calls for contigs belonging
+# to a dominant (clonal) V/D/J using multiple evidence sources:
+# 1) TRUST4 clustering output
+# 2) IgBlast AIRR output
+# 3) FASTA-level V/D/J annotation
+# 4) Cell-type annotation (HRS vs B cells)
+# 5) Singlet/doublet filtering
+#
+# The final goal is to enforce consistent dominant V/D/J calls in malignant HRS
+################################################################################
 
 library(dplyr)
 
-sample="HL1"
-setwd(paste0('/Users/saramoein/Documents/new_run_HL_May2025/',sample))
-FILTERED_out_clone=read.table('out_clone_sara.tsv',sep='\t')
-## extracting the dominant clone
-View(FILTERED_out_clone) # 
+################################################################################
+# STEP 0: Sample setup and dominant clone definition
+################################################################################
+
+sample="sample1"
+setwd(paste0('set_working_directory/',sample))
+
+# Read TRUST4 clustering output
+FILTERED_out_clone=read.table('cluster_clone.tsv',sep='\t')
+
+# Define dominant (clonal) V/D/J genes
+# D is set to "*" for light chain
+
 dominant_V="IGLV4-69*01"
 dominant_D="*"
 dominant_J="IGLJ1*01"
+
+# Infer chain type (IGH / IGK / IGL) from V gene prefix
 chain=substr(dominant_V,1,3)
 
-## reading the GEX cell type annotation 
-cell_type_annotation=read.csv('/Users/saramoein/Documents/new_run_HL_Jan2025/2024-11-26_CellMetadata_HL1-24incHL8R_RetainedCellsOnly_MainCellTypeAndSubtypeNames.csv')
+################################################################################
+# STEP 1: Cell-type annotation and TRUST4 contig preprocessing
+################################################################################
+
+# Read cell-type annotation (GEX metadata)
+cell_type_annotation=read.csv('cell_metadata.csv')
+# Extract short cell barcode (used for matching TRUST4 contigs)
 cell_type_annotation$cell_id1=sub("^.*_([A-Z]+)-.*$", "\\1", cell_type_annotation$Full.cell_id)
+
+# Keep only annotations for the current sample
 sample_cell_type_annotation=cell_type_annotation[cell_type_annotation$Patient== sample,]
 
-## extracting the clustering results from TRUST4; we use this file for all analysis since it has all the complete CDR3s. This file contains TRUST4 V/D/J
-
+# Rename TRUST4 columns to meaningful names
 colnames(FILTERED_out_clone)=c("consensus_id",	"index_within_consensus",	"V_gene",	"D_gene",	"J_gene",	"C_gene",	"CDR1",	"CDR2",	"CDR3",	"CDR3_score",	"read_fragment_count", "CDR3_germline_similarity", "full_length_assembly","contig_id","s" )
 
+# Assign chain based on V gene
 FILTERED_out_clone$chain=substr(FILTERED_out_clone$V_gene,1,3)
+
+# Keep only contigs from the dominant chain
 FILTERED_out_clone_dominantChain=FILTERED_out_clone[which(FILTERED_out_clone$chain==chain),]
 
 
-### the cuurent VDJ gene columns are renamed to TRUST4_V/D/J_calles
+# Rename TRUST4 V/D/J columns
 colnames(FILTERED_out_clone_dominantChain)[3]<-"trust4_v_call"
 colnames(FILTERED_out_clone_dominantChain)[4]<-"trust4_d_call"
 colnames(FILTERED_out_clone_dominantChain)[5]<-"trust4_j_call"
+
+# Rename contig identifier
 colnames(FILTERED_out_clone_dominantChain)[14]<-"sequence_id"
 
 
-### extracting the HRS contigs from data 
+################################################################################
+# STEP 1.1: Match contigs to cell types and keep HRS/B cells only
+################################################################################
+
+# Extract cell barcode from contig ID
 FILTERED_out_clone_dominantChain$cell_id1= substr(FILTERED_out_clone_dominantChain$sequence_id,1,16)
+
+# Keep contigs with annotated cell types
 FILTERED_out_clone_dominantChain=FILTERED_out_clone_dominantChain[FILTERED_out_clone_dominantChain$cell_id1 %in% sample_cell_type_annotation$cell_id1,]
+
+# Map malignancy status to contigs
 FILTERED_out_clone_dominantChain_index= match(FILTERED_out_clone_dominantChain$cell_id1, sample_cell_type_annotation$cell_id1)
 FILTERED_out_clone_dominantChain$malig_status=sample_cell_type_annotation$MainCelltype[FILTERED_out_clone_dominantChain_index]
+
+# Keep only HRS and B cells
 FILTERED_out_clone_dominantChain=FILTERED_out_clone_dominantChain[which(FILTERED_out_clone_dominantChain$malig_status %in% c("HRS","Bcells")),]
+
+# For HRS cells: keep the contig with the highest read count per cell
 HRS_FILTERED_out_clone_dominantChain=FILTERED_out_clone_dominantChain[which(FILTERED_out_clone_dominantChain$malig_status=="HRS"),]
 HRS_FILTERED_out_clone_dominantChain= HRS_FILTERED_out_clone_dominantChain %>% group_by(cell_id1) %>% dplyr::slice(which.max(read_fragment_count)) 
 
 
-##### keeping only singlet and low_confident_singlet
-# singlet_low_confidential= read.table(paste0('./new_new_doublets_fixed/combined_lIGLt_chains_automated/','2024-09-23','_low_confident_singlet_IGL_IGK_read_thre1.txt'))
-# singlet= read.table(paste0('./new_new_doublets_fixed/combined_lIGLt_chains_automated/','2024-09-23','_singlet_IGL_IGK_read_thre1.txt'))
-# doublet= read.table(paste0('./new_new_doublets_fixed/combined_lIGLt_chains_automated/','2024-09-23','_doublet_IGL_IGK_read_thre1.txt'))
+################################################################################
+# STEP 1.2: Remove doublets and keep singlets only
+################################################################################
 
-pilot_cellStatus_file= read.csv(Sys.glob(paste0('/Users/saramoein/Documents/new_run_HL_May2025/FINAL_doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGK_IGL.csv')))
+pilot_cellStatus_file= read.csv(Sys.glob(paste0('./doublets_BCR_thre07_ent08/',sample,'_Rawdata_IGK_IGL.csv')))
 
+# Extract singlet cell barcodes
 singlet= unique(pilot_cellStatus_file$cell_id1[pilot_cellStatus_file$final_ReadStatus=="singlet"])
 
+# Keep only singlet HRS contigs
 HRS_FILTERED_out_clone_dominantChain= HRS_FILTERED_out_clone_dominantChain[HRS_FILTERED_out_clone_dominantChain$cell_id1 %in% (singlet),]
 
-### HRS contigs are used for the next step for igblasting
+# Export contig IDs for IgBlast input
 write.table(HRS_FILTERED_out_clone_dominantChain$sequence_id,paste0('contigs_',sample,'_',chain,'.txt'),row.names= FALSE, col.names= FALSE, quote= FALSE)
 
 
 
-# reading the igbalst table; the output of igblast is airr
+################################################################################
+# STEP 1.3: Read and merge IgBlast AIRR output
+################################################################################
+
 igblast_output= read.csv(paste0(sample,'_igblast_output2_IGL_correrct.csv'), 
                          header = TRUE,     # or FALSE if no header
                          fill = TRUE,       # fills missing columns with NA
@@ -66,30 +114,35 @@ igblast_output= read.csv(paste0(sample,'_igblast_output2_IGL_correrct.csv'),
                          stringsAsFactors = FALSE,  # keep text as strings
                          na.strings = c("", "NA"))   # treat empty cells as NA
 
+# Remove empty sequences
 igblast_output= igblast_output[is.na(igblast_output$sequence)==FALSE, ]
 length(HRS_FILTERED_out_clone_dominantChain$cell_id1)
 common=intersect(substr(igblast_output$sequence_id ,1,16) , HRS_FILTERED_out_clone_dominantChain$cell_id1)
 length(common)
-## renames in VDJ gene columns to igblast_V/D/J_calls
+
+# Rename IgBlast V/D/J columns
 colnames(igblast_output)[10]="igblast_v_call"
 colnames(igblast_output)[11]="igblast_d_call"
 colnames(igblast_output)[12]="igblast_j_call"
 
-## merging TRUST4_cluster file with igblast table
-
+# Merge TRUST4 and IgBlast by contig ID
 merge_igblast_trust4_all = merge(HRS_FILTERED_out_clone_dominantChain,igblast_output,by="sequence_id")
+
+# Replace missing D calls with "*"
 merge_igblast_trust4_all$igblast_d_call[is.na(merge_igblast_trust4_all$igblast_d_call) == TRUE] <- "*"
 merge_igblast_trust4=merge_igblast_trust4_all#cbind(merge_igblast_trust4_all[,c(1:30)])
 
+################################################################################
+# STEP 1.4: TRUST4 vs IgBlast reconciliation
+################################################################################
 
-
-### the idea is to generate a new column that select the between igblast ot trust4 
+# Initialize reconciled V/D/J columns
 merge_igblast_trust4$trust4_igblast_v_call=NA
 merge_igblast_trust4$trust4_igblast_d_call=NA
 merge_igblast_trust4$trust4_igblast_j_call=NA
 
+# Prefer IgBlast only if it matches the dominant clone
 for (i in 1:nrow(merge_igblast_trust4)){
-  
   if (grepl(dominant_V,merge_igblast_trust4$igblast_v_call[i],fixed =TRUE) & grepl(dominant_D , merge_igblast_trust4$igblast_d_call[i],fixed =TRUE) & grepl(dominant_J,merge_igblast_trust4$igblast_j_call[i] ,fixed =TRUE)){
     merge_igblast_trust4$trust4_igblast_v_call[i]= dominant_V
     merge_igblast_trust4$trust4_igblast_j_call[i]= dominant_J 
@@ -98,21 +151,16 @@ for (i in 1:nrow(merge_igblast_trust4)){
     merge_igblast_trust4$trust4_igblast_v_call[i]= merge_igblast_trust4$trust4_v_call[i] 
     merge_igblast_trust4$trust4_igblast_j_call[i]= merge_igblast_trust4$trust4_j_call[i] 
     merge_igblast_trust4$trust4_igblast_d_call[i]= merge_igblast_trust4$trust4_d_call[i]
-  }
-  
-  
+  } 
 }
 
-#########STEP2#######
-
-# Step2 aims to select any rows in contig in TRUST4 fasta file that has common V/D/J with dominant V/D/J. We should extract top 3 V/D/J gebes from igbalst.
-## any rows in igblast results that contains the dominant V/D/J  can give us top 3 V/D/J genes
-## all those contigs are extracted from fasta file
-
+################################################################################
+# STEP 2: FASTA-level rescue of dominant V/D/J
+################################################################################
 
 fasta_subset=read.table('singleline_TRUST_all_BCR_R2_annot.fa')
 
-### extract one full sequence from the dominant VDJ and extract from igblast v1,v2,v3,j1,j2,j3,d1,d2,d3
+## extract one full sequence from the dominant VDJ and extract from igblast v1,v2,v3,j1,j2,j3,d1,d2,d3
 
 v1="IGLV4-69*01"
 v2="IGLV4-69*02"
@@ -124,24 +172,16 @@ j1="IGLJ1*01"
 j2="IGLJ6*01"
 j3="IGLJ2*01"
 
-
-
 merge_igblast_trust4$fix_trust4_fasta_v_call="NA"
 merge_igblast_trust4$fix_trust4_fasta_j_call="NA"
 merge_igblast_trust4$fix_trust4_fasta_d_call="NA"
 sel_dat =data.frame()
 
-if ((!is.na(v1) & !is.na(j1) & chain!="IGL") | (!is.na(v1) & !is.na(j1)  & !is.na(d1) & chain=="IGL")){
-  
-  
-  
+if ((!is.na(v1) & !is.na(j1) & chain!="IGL") | (!is.na(v1) & !is.na(j1)  & !is.na(d1) & chain=="IGL")){ 
   fasta_subset1= fasta_subset[grepl(v1, as.character(fasta_subset$V4),fix=TRUE),]
   fasta_subset2= fasta_subset[grepl(v2, as.character(fasta_subset$V4),fix=TRUE),]
   fasta_subset3= fasta_subset[grepl(v3, as.character(fasta_subset$V4),fix=TRUE),]
   data= rbind(fasta_subset1,fasta_subset2,fasta_subset3)
-  
-  
-  
   fasta_subset4= data[grepl(j1, as.character(data$V6),fix=TRUE),]
   fasta_subset5= data[grepl(j2, as.character(data$V6),fix=TRUE),]
   fasta_subset6= data[grepl(j3, as.character(data$V6),fix=TRUE),]
@@ -209,23 +249,18 @@ for (i in 1:nrow(FILTERED_out_clone_dominantChain)){
   if (length(ind)>0) {
     FILTERED_out_clone_dominantChain$corrected_Vgene[i]= merge_igblast_trust4$final_fixed_v_call[ind]
     FILTERED_out_clone_dominantChain$corrected_Dgene[i]= merge_igblast_trust4$final_fixed_d_call[ind]
-    FILTERED_out_clone_dominantChain$corrected_Jgene[i]= merge_igblast_trust4$final_fixed_j_call[ind]
-    
+    FILTERED_out_clone_dominantChain$corrected_Jgene[i]= merge_igblast_trust4$final_fixed_j_call[ind]    
   }else {
     FILTERED_out_clone_dominantChain$corrected_Vgene[i]= FILTERED_out_clone_dominantChain$trust4_v_call[i]
     FILTERED_out_clone_dominantChain$corrected_Dgene[i]= FILTERED_out_clone_dominantChain$trust4_d_call[i]
-    FILTERED_out_clone_dominantChain$corrected_Jgene[i]= FILTERED_out_clone_dominantChain$trust4_j_call[i]
-    
-    
+    FILTERED_out_clone_dominantChain$corrected_Jgene[i]= FILTERED_out_clone_dominantChain$trust4_j_call[i]    
   } 
   
   if (FILTERED_out_clone_dominantChain$trust4_v_call[i] %in% c(v1,v2,v3) & FILTERED_out_clone_dominantChain$malig_status[i]=="HRS"){
-    FILTERED_out_clone_dominantChain$corrected_Vgene[i]=dominant_V
-    
+    FILTERED_out_clone_dominantChain$corrected_Vgene[i]=dominant_V    
   }
   if (FILTERED_out_clone_dominantChain$trust4_d_call[i] %in% c(d1,d2,d3) & FILTERED_out_clone_dominantChain$malig_status[i]=="HRS"){
-    FILTERED_out_clone_dominantChain$corrected_Dgene[i]=dominant_D
-    
+    FILTERED_out_clone_dominantChain$corrected_Dgene[i]=dominant_D    
   }
   
   if (FILTERED_out_clone_dominantChain$trust4_j_call[i] %in% c(j1,j2,j3) & FILTERED_out_clone_dominantChain$malig_status[i]=="HRS"){
