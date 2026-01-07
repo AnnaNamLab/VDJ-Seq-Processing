@@ -149,7 +149,7 @@ Rscript scripts/BCR/doublet_finding_BCR.R \
 ```
 
 
-### Detecte dominant clone
+### Detect dominant clone
 The most expanded clone for each chain is identified, and the its V(D)J is recorded:
 ```bash
 Rscript scripts/BCR/expandedClone_identification.R
